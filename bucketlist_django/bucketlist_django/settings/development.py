@@ -2,3 +2,5 @@
 from defaults import *
 
 DEBUG = True
+
+WSGI_APPLICATION = 'bucketlist_django.wsgi_development.application'
