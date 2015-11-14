@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from bucketlist.models import Bucketlist
+from bucketlist.models import Bucketlist, BucketlistItem
 
 
 # Create your tests here.
@@ -34,6 +34,3 @@ class BucketlistTestCase(TestCase):
         self.assertEqual(self.listitem.bucketlist, self.mylist, msg='incorrect bucketlist that owns this item')
         self.assertEqual(self.listitem.date_created, self.listitem.date_modified, msg='date_created is not equal to date_modified on creation of object')
         self.assertIsNotNone(self.listitem.id, msg='bucketlist item has to id')
-
-
-
