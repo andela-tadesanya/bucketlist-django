@@ -1,15 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 class Bucketlist(models.Model):
-    name = models.CharField(
-                            'bucketlist name',
-                             max_length=50,
-                             blank=False)
+    name = models.CharField('bucketlist name',
+                            max_length=50,
+                            blank=False)
     date_created = models.DateTimeField('created on',
-                                         auto_now_add=True)
-    date_modified = models.DateTimeField('date last modified'
+                                        null=True,
+                                        blank=True,
+                                        auto_now_add=True)
+    date_modified = models.DateTimeField('date last modified',
+                                         null=True,
+                                         blank=True,
                                          auto_now=True)
     created_by = models.ForeignKey(User)
 
@@ -21,18 +25,25 @@ class Bucketlist(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class BucketlistItem(models.Model):
-    name = models.CharField('bucketlist item name', max_length=150, blank=False)
+    name = models.CharField('bucketlist item name',
+                            max_length=150,
+                            blank=False)
     date_created = models.DateTimeField('created on',
-                                         auto_now_add=False)
-    date_modified = models.DateTimeField('last modified'
+                                        null=True,
+                                        blank=True,
+                                        auto_now_add=False)
+    date_modified = models.DateTimeField('last modified',
+                                         null=True,
+                                         blank=True,
                                          auto_now=False)
     done = models.BooleanField('Done',
-                                default=False)
+                               default=False)
     bucketlist = models.ForeignKey(Bucketlist)
 
     class Meta:
-        ordering = [date_created]
+        ordering = ['date_created']
         verbose_name = 'bucketlist item'
         verbose_name_plural = 'bucketlist items'
 

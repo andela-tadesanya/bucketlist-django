@@ -13,24 +13,36 @@ class BucketlistTestCase(TestCase):
         Bucketlist.objects.create(
                                   name='checkpoint 1',
                                   created_by=self.user)
-        self.mylist = Bucketlist.object.get(name='checkpoint 1')
+        self.mylist = Bucketlist.objects.get(name='checkpoint 1')
 
         BucketlistItem.objects.create(
                                       name='write tests',
                                       done=False,
                                       bucketlist=self.mylist)
-        self.listitem = BucketlistItem.object.get(name='write tests')
+        self.listitem = BucketlistItem.objects.get(name='write tests')
 
     def test_bucketlist_created_properly(self):
         '''check bucketlist is created properly'''
         self.assertIsNotNone(self.mylist, msg='the bucketlist was not created')
-        self.assertEqual(self.mylist.date_created, self.mylist.date_modified, msg='date_created is not equal to date_modified on creation of object')
-        self.assertIsNotNone(self.mylist.items, msg='no items were found for this bucketlist')
-        self.assertEqual(self.mylist.created_by, self.user, msg='creator of the bucketlist is not correct')
+        self.assertEqual(self.mylist.date_created,
+                         self.mylist.date_modified,
+                         msg='date_created is not equal to date_modified on creation of object')
+        self.assertIsNotNone(
+                             self.mylist.bucketlistitem_set.all(),
+                             msg='no items were found for this bucketlist')
+        self.assertEqual(self.mylist.created_by,
+                         self.user,
+                         msg='creator of the bucketlist is not correct')
 
     def test_bucketlist_item_created_properly(self):
         '''check bucketlist item is created properly'''
-        self.assertIsNotNone(self.listitem, msg='the bucketlist item does not exist')
-        self.assertEqual(self.listitem.bucketlist, self.mylist, msg='incorrect bucketlist that owns this item')
-        self.assertEqual(self.listitem.date_created, self.listitem.date_modified, msg='date_created is not equal to date_modified on creation of object')
-        self.assertIsNotNone(self.listitem.id, msg='bucketlist item has to id')
+        self.assertIsNotNone(self.listitem,
+                             msg='the bucketlist item does not exist')
+        self.assertEqual(self.listitem.bucketlist,
+                         self.mylist,
+                         msg='incorrect bucketlist that owns this item')
+        self.assertEqual(self.listitem.date_created,
+                         self.listitem.date_modified,
+                         msg='date_created is not equal to date_modified on creation of object')
+        self.assertIsNotNone(self.listitem.id,
+                             msg='bucketlist item has to id')
