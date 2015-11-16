@@ -46,3 +46,8 @@ class BucketlistTestCase(TestCase):
                          msg='date_created is not equal to date_modified on creation of object')
         self.assertIsNotNone(self.listitem.id,
                              msg='bucketlist item has to id')
+
+    def test_bucketlist_endpoint(self):
+        '''test bucketlist endpoint is returning right data'''
+        response = self.client.get('/api/v1.0/bucketlist/')
+        self.assertIsNotNone(response)
