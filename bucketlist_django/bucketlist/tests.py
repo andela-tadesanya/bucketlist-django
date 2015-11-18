@@ -51,3 +51,9 @@ class BucketlistTestCase(TestCase):
         '''test bucketlist endpoint is returning right data'''
         response = self.client.get('/api/v1.0/bucketlist/')
         self.assertIsNotNone(response)
+
+    def test_bucketlist_item(self):
+        '''test a bucketlist item endpoint returns correctly'''
+        response = self.client.get('/api/v1.0/bucketlist/1/item/1')
+        self.assertIsNotNone(response)
+    
