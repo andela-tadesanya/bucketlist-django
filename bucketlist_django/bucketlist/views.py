@@ -9,11 +9,12 @@ from rest_framework import status
 
 # Create your views here.
 class BucketListView(APIView):
-    '''list all bucketlists'''
+    '''manages read and creation of bucketlists'''
     def get(self, request, format=None):
+        # fetch all bucketlists and serialize them
         bucketlists = Bucketlist.objects.all()
         serializer = BucketlistSerializer(bucketlists, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
         serializer = BucketlistSerializer(data=request.data)

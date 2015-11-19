@@ -4,7 +4,7 @@ from bucketlist import views
 
 
 urlpatterns = [
-    url(r'^bucketlist/$', views.BucketListView.as_view()),
+    url(r'^bucketlist/$', views.BucketListView.as_view(), name='bucketlists'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
