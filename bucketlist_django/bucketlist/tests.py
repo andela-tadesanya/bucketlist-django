@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from bucketlist.models import Bucketlist, BucketlistItem
 from rest_framework.test import APITestCase
 from django.core.urlresolvers import reverse
-import json
 
 
 # Create your tests here.
@@ -57,7 +56,7 @@ class BucketlistTestCase(TestCase):
                              msg='bucketlist item has to id')
 
 
-class BucketlistEndpointTestCase(APITestCase):
+class BucketlistEndpointTestCase(TestCase):
 
     @classmethod
     def setUpClass(self):
@@ -65,81 +64,61 @@ class BucketlistEndpointTestCase(APITestCase):
                                              username='john',
                                              email='johndoe@email.com',
                                              password='kittylitter')
+        self.user.save()
 
+    @classmethod
+    def tearDownClass(self):
+        pass
 
-    def test_create_bucketlist(self):
-        '''ensure a bucketlist can be created'''
-        url = reverse('bucketlist:bucketlists')
-        data = json.dumps({'name': 'my list', 'created_by': 1})
-        response = self.client.post(url, data, format='json')
+    def test_01_bucketlist_endpoint(self):
+        '''test bucketlist endpoint is returning right data'''
+        response = self.client.get('/api/v1.0/bucketlist/')
+        self.assertIsNotNone(response)
+        self.assertEqual(response.status_code, 200)
+
+    def test_02_bucketlist_create(self):
+        '''test if bucketlist can be created'''
+        response = self.client.post('/api/v1.0/bucketlist/',
+                                    data={'name': 'my list', 'created_by': 1})
         self.assertEqual(response.status_code, 201)
+        self.assertIn('name', response.data,
+                      msg='bucketlist name not in return data')
+        self.assertIn('created_by', response.data,
+                      msg='created_by user not in return data')
+        self.assertIn('date_created', response.data,
+                      msg='date_created not in return data')
+        self.assertIn('date_modified', response.data,
+                      msg='date_modified not in return data')
+        self.assertEqual(response.data['name'], 'my list',
+                         msg='incorrect name stored')
+        self.assertEqual(response.data['created_by'], 1,
+                         msg='incorrect user stored')
+        self.assertEqual(response.data['date_created'],
+                         response.data['date_modified'],
+                         msg='creation date does not match modified date')
 
-# class BucketlistEndpointTestCase(TestCase):
+    def test_03_bucketlist_update(self):
+        '''test bucketlist can be updated'''
+        response = self.client.put('/api/v1.0/bucketlist/1',
+                                   {'name': 'our list'})
+        self.assertEqual(response.status_code, 202)
+        self.assertIn('name', response.data,
+                      msg='bucketlist name not in return data')
+        self.assertIn('created_by', response.data,
+                      msg='created_by user not in return data')
+        self.assertIn('date_created', response.data,
+                      msg='date_created not in return data')
+        self.assertIn('date_modified', response.data,
+                      msg='date_modified not in return data')
+        self.assertEqual(response.data['name'], 'our list',
+                         msg='incorrect name updated')
+        self.assertEqual(response.data['created_by'], 1,
+                         msg='incorrect user stored')
+        self.assertNotEqual(response.data['date_created'],
+                            response.data['date_modified'],
+                            msg='creation date does not match modified date')
 
-#     @classmethod
-#     def setUpClass(self):
-#         self.user = User.objects.create_user(
-#                                              username='john',
-#                                              email='johndoe@email.com',
-#                                              password='kittylitter')
-
-#     @classmethod
-#     def tearDownClass(self):
-#         pass
-
-#     def test_01_bucketlist_endpoint(self):
-#         '''test bucketlist endpoint is returning right data'''
-#         response = self.client.get('/api/v1.0/bucketlist/')
-#         self.assertIsNotNone(response)
-#         self.assertEqual(response.status_code, 200)
-
-#     def test_02_bucketlist_create(self):
-#         '''test if bucketlist can be created'''
-#         response = self.client.post('/api/v1.0/bucketlist/', data={'name': 'my list', 'created_by': 2})
-#         self.assertEqual(response.status_code, 201)
-#         self.assertIn('name', response.data[0],
-#                       msg='bucketlist name not in return data')
-#         self.assertIn('created_by', response.data[0],
-#                       msg='created_by user not in return data')
-#         self.assertIn('date_created', response.data[0],
-#                       msg='date_created not in return data')
-#         self.assertIn('date_modified', response.data[0],
-#                       msg='date_modified not in return data')
-#         self.assertEqual(response.data[0]['name'], 'my list',
-#                          msg='incorrect name stored')
-#         self.assertEqual(response.data[0]['created_by'], 2,
-#                          msg='incorrect user stored')
-#         self.assertEqual(response.data[0]['date_created'],
-#                          response.data[0]['date_modified'],
-#                          msg='creation date does not match modified date')
-
-#     def test_03_bucketlist_update(self):
-#         '''test bucketlist can be updated'''
-#         response = self.client.put('/api/v1.0/bucketlist/1',
-#                                    {'name': 'our list'})
-#         self.assertEqual(response.status_code, 202)
-#         self.assertIn('name', response.data[0],
-#                       msg='bucketlist name not in return data')
-#         self.assertIn('created_by', response.data[0],
-#                       msg='created_by user not in return data')
-#         self.assertIn('date_created', response.data[0],
-#                       msg='date_created not in return data')
-#         self.assertIn('date_modified', response.data[0],
-#                       msg='date_modified not in return data')
-#         self.assertEqual(response.data[0]['name'], 'our list',
-#                          msg='incorrect name updated')
-#         self.assertEqual(response.data[0]['created_by'], 2,
-#                          msg='incorrect user stored')
-#         self.assertNotEqual(response.data[0]['date_created'],
-#                             response.data[0]['date_modified'],
-#                             msg='creation date does not match modified date')
-
-#     def test_04_bucketlist_delete(self):
-#         '''test bucketlist can be deleted'''
-#         response = self.client.delete('/api/v1.0/bucketlist/1')
-#         self.assertEqual(response.status_code, 204)
-
-#     def test_bucketlist_item(self):
-#         '''test a bucketlist item endpoint returns correctly'''
-#         response = self.client.get('/api/v1.0/bucketlist/1/item/1')
-#        self.assertIsNotNone(response)
+    def test_04_bucketlist_delete(self):
+        '''test bucketlist can be deleted'''
+        response = self.client.delete('/api/v1.0/bucketlist/1')
+        self.assertEqual(response.status_code, 204)
