@@ -18,6 +18,7 @@ class BucketListView(APIView):
 
     def post(self, request, format=None):
         serializer = BucketlistSerializer(data=request.data)
+        # create bucketlist if data is valid 
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -29,3 +30,36 @@ class BucketListView(APIView):
             serializer.update()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BucketListDetailView(APIView):
+    '''manages get, update and delete for individual bucketlists'''
+
+    def get_object(self, id):
+        '''returns an instance of a bucketlist object'''
+        try:
+            return Bucketlist.objects.get(id=id)
+        except Bucketlist.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        '''returns an individual bucketlist'''
+        bucketlist = self.get_object(id)
+        serializer = BucketlistSerializer(bucketlist)
+        return Response(serializer.data)
+
+    def put(self, request, id, format=None):
+        '''updates a bucketlist'''
+        # get the bucketlist
+        bucketlist = self.get_object(id)
+        serializer = BucketlistSerializer(bucketlist, data={'name': request.data['name']}, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id, format=None):
+        # get the bucketlist and delete it
+        bucketlist = self.get_object(id)
+        bucketlist.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
