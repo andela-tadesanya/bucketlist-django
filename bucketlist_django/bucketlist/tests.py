@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from bucketlist.models import Bucketlist, BucketlistItem
 from rest_framework.test import APITestCase
 from django.core.urlresolvers import reverse
+from rest_framework.test import APIClient
 
 
 # Create your tests here.
@@ -56,7 +57,7 @@ class BucketlistTestCase(TestCase):
                              msg='bucketlist item has to id')
 
 
-class BucketlistEndpointTestCase(TestCase):
+class BucketlistEndpointTestCase(APITestCase):
 
     @classmethod
     def setUpClass(self):
@@ -65,6 +66,10 @@ class BucketlistEndpointTestCase(TestCase):
                                              email='johndoe@email.com',
                                              password='kittylitter')
         self.user.save()
+        Bucketlist.objects.create(
+                                  name='checkpoint 2',
+                                  created_by=self.user)
+        self.client = APIClient()
 
     @classmethod
     def tearDownClass(self):
@@ -79,7 +84,8 @@ class BucketlistEndpointTestCase(TestCase):
     def test_02_bucketlist_create(self):
         '''test if bucketlist can be created'''
         response = self.client.post('/api/v1.0/bucketlist/',
-                                    data={'name': 'my list', 'created_by': 1})
+                                    {'name': 'my list', 'created_by': 1},
+                                    format='json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('name', response.data,
                       msg='bucketlist name not in return data')
@@ -97,11 +103,18 @@ class BucketlistEndpointTestCase(TestCase):
                          response.data['date_modified'],
                          msg='creation date does not match modified date')
 
-    def test_03_bucketlist_update(self):
+    def test_03_bucketlist_get_individual(self):
+        '''test if an individual bucketlist can be fetched'''
+        url = reverse('bucketlist:bucketlist_single', kwargs={'id': 1})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_04_bucketlist_update(self):
         '''test bucketlist can be updated'''
-        response = self.client.put('/api/v1.0/bucketlist/1',
-                                   {'name': 'our list'})
-        self.assertEqual(response.status_code, 202)
+        url = reverse('bucketlist:bucketlist_single', kwargs={'id': 1})
+        data = {'name': 'our list'}
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, 200)
         self.assertIn('name', response.data,
                       msg='bucketlist name not in return data')
         self.assertIn('created_by', response.data,
@@ -118,7 +131,10 @@ class BucketlistEndpointTestCase(TestCase):
                             response.data['date_modified'],
                             msg='creation date does not match modified date')
 
-    def test_04_bucketlist_delete(self):
+    def test_05_bucketlist_delete(self):
         '''test bucketlist can be deleted'''
-        response = self.client.delete('/api/v1.0/bucketlist/1')
+        response = self.client.delete('/api/v1.0/bucketlist/1/')
         self.assertEqual(response.status_code, 204)
+
+
+
