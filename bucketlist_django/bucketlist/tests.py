@@ -79,7 +79,7 @@ class BucketlistEndpointTestCase(APITestCase):
         '''test bucketlist endpoint is returning right data'''
         response = self.client.get('/api/v1.0/bucketlist/')
         self.assertIsNotNone(response)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 204)
 
     def test_02_bucketlist_create(self):
         '''test if bucketlist can be created'''

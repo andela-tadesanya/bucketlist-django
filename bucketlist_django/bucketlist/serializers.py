@@ -21,4 +21,5 @@ class BucketlistItemSerializer(serializers.ModelSerializer):
                   'name',
                   'date_created',
                   'date_modified',
-                  'done')
+                  'done',
+                  'bucketlist')
