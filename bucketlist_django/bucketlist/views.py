@@ -1,15 +1,37 @@
 from django.shortcuts import render
 from bucketlist.models import Bucketlist, BucketlistItem
-from bucketlist.serializers import BucketlistSerializer, BucketlistItemSerializer
+from bucketlist.serializers import BucketlistSerializer,\
+            BucketlistItemSerializer, UserSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.models import User
+from rest_framework import generics
+from rest_framework.authentication import SessionAuthentication,\
+                    BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserCreate(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
 class BucketListView(APIView):
     '''manages read and creation of bucketlists'''
+
+    authentication_classes = (SessionAuthentication,
+                              BasicAuthentication,
+                              TokenAuthentication)
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, format=None):
         # fetch all bucketlists and serialize them
         bucketlists = Bucketlist.objects.all()
@@ -70,7 +92,6 @@ class BucketListDetailView(APIView):
         bucketlist = self.get_object(id)
         bucketlist.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-        
 
 
 class BucketListItemListView(APIView):

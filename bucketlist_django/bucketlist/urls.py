@@ -3,7 +3,10 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from bucketlist import views
 
 
+
 urlpatterns = [
+    url(r'^users/$', views.UserCreate.as_view()),
+    url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
     url(r'^bucketlist/$', views.BucketListView.as_view(), name='bucketlist_list'),
     url(r'^bucketlist/(?P<id>[0-9]+)/$', views.BucketListDetailView.as_view(), name='bucketlist_single'),
     url(r'^bucketlist/(?P<id>[0-9]+)/items/$', views.BucketListItemListView.as_view(), name='bucketlist_item_list'),
