@@ -33,8 +33,9 @@ class BucketListView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
+        '''returns all the bucketlist of a user'''
         # fetch all bucketlists and serialize them
-        bucketlists = Bucketlist.objects.all()
+        bucketlists = Bucketlist.objects.all().filter(created_by=request.user)
 
         # check if bucketlists is empty
         if len(bucketlists) == 0:
@@ -44,10 +45,13 @@ class BucketListView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
+        '''creates a bucketlist for the current user'''
+
         serializer = BucketlistSerializer(data=request.data)
+
         # create bucketlist if data is valid
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(created_by=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
