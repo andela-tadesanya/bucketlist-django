@@ -106,8 +106,9 @@ class BucketListDetailView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id, format=None):
-        # get the bucketlist and delete it
-        bucketlist = self.get_object(id)
+        # get the bucketlist
+        bucketlist = self.get_object(id, request.user)
+
         bucketlist.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -247,7 +248,12 @@ class BucketListItemDetailView(APIView):
 
     def delete(self, request, id, item_id, format=None):
         '''deletes a bucketlist item'''
+
+        # get the bucketlist object the item belongs to
+        bucketlist = self.get_object(id, request.user)
+
         # get the bucketlist item
-        bucketlist_item = self.get_item(item_id)
+        bucketlist_item = self.get_item(item_id, bucketlist)
+
         bucketlist_item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
