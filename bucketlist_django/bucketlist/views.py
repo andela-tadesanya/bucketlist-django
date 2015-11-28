@@ -115,19 +115,33 @@ class BucketListDetailView(APIView):
 class BucketListItemListView(APIView):
     '''displays and creates items of a bucketlist'''
 
-    def get_object(self, id):
+    # set authentication and permissions for this view
+    authentication_classes = (SessionAuthentication,
+                              BasicAuthentication,
+                              TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, id, user):
         '''returns an instance of a bucketlist object'''
+
+        # get the bucketlist
         try:
-            return Bucketlist.objects.get(id=id)
+            bucketlist = Bucketlist.objects.get(id=id)
         except Bucketlist.DoesNotExist:
             raise Http404
+
+        # check if bucketlist belongs to this user
+        if bucketlist.created_by != user:
+            raise PermissionDenied
+        else:
+            return bucketlist
 
     def get(self, request, id, format=None):
         '''returns a list of items in a bucketlist'''
         # get the instance of the bucketlist
-        bucketlist = self.get_object(id)
+        bucketlist = self.get_object(id, request.user)
 
-        # get bucketlist items
+        # get items for the bucketlist
         bucketlist_items = BucketlistItem.objects.all().filter(bucketlist=bucketlist)
 
         # check if bucketlists is empty

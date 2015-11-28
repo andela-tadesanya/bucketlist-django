@@ -44,7 +44,7 @@ class BucketlistItem(models.Model):
                                          auto_now=False)
     done = models.BooleanField('Done',
                                default=False)
-    bucketlist = models.ForeignKey(Bucketlist)
+    bucketlist = models.ForeignKey(Bucketlist, related_name='bucketlistitems')
 
     class Meta:
         ordering = ['date_created']

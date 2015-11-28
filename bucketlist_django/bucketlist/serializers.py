@@ -24,18 +24,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class BucketlistSerializer(serializers.ModelSerializer):
-    created_by = UserSerializer(required=False)
-
-    class Meta:
-        model = Bucketlist
-        fields = ('id',
-                  'name',
-                  'date_created',
-                  'date_modified',
-                  'created_by')
-
-
 class BucketlistItemSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -46,3 +34,17 @@ class BucketlistItemSerializer(serializers.ModelSerializer):
                   'date_modified',
                   'done',
                   'bucketlist')
+
+
+class BucketlistSerializer(serializers.ModelSerializer):
+    created_by = UserSerializer(required=False)
+    bucketlistitems = BucketlistItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Bucketlist
+        fields = ('id',
+                  'name',
+                  'date_created',
+                  'date_modified',
+                  'bucketlistitems',
+                  'created_by')
