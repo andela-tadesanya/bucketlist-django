@@ -172,21 +172,42 @@ class BucketListItemListView(APIView):
 class BucketListItemDetailView(APIView):
     '''manages display, update and deletion of individual bucketlist items'''
 
-    def get_item(self, id):
+    # set authentication and permissions for this view
+    authentication_classes = (SessionAuthentication,
+                              BasicAuthentication,
+                              TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, id, user):
+        '''returns an instance of a bucketlist object'''
+
+        # get the bucketlist
+        try:
+            bucketlist = Bucketlist.objects.get(id=id)
+        except Bucketlist.DoesNotExist:
+            raise Http404
+
+        # check if bucketlist belongs to this user
+        if bucketlist.created_by != user:
+            raise PermissionDenied
+        else:
+            return bucketlist
+
+    def get_item(self, item_id, bucketlist):
         '''returns an instance of a bucketlist item object'''
         try:
-            return BucketlistItem.objects.get(id=id)
+            return BucketlistItem.objects.filter(bucketlist=bucketlist).filter(id=item_id).first()
         except BucketlistItem.DoesNotExist:
             raise Http404
 
     def get(self, request, id, item_id, format=None):
         '''returns a bucketlist item of a particular bucketlist'''
 
+        # get the bucketlist object the item belongs to
+        bucketlist = self.get_object(id, request.user)
+
         # get bucketlist items
-        try:
-            bucketlist_items = BucketlistItem.objects.get(id=item_id)
-        except BucketlistItem.DoesNotExist:
-            raise Http404
+        bucketlist_items = self.get_item(item_id, bucketlist)
 
         # create serializer
         serializer = BucketlistItemSerializer(bucketlist_items)

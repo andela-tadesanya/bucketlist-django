@@ -37,11 +37,11 @@ class BucketlistItem(models.Model):
     date_created = models.DateTimeField('created on',
                                         null=True,
                                         blank=True,
-                                        auto_now_add=False)
+                                        auto_now_add=True)
     date_modified = models.DateTimeField('last modified',
                                          null=True,
                                          blank=True,
-                                         auto_now=False)
+                                         auto_now=True)
     done = models.BooleanField('Done',
                                default=False)
     bucketlist = models.ForeignKey(Bucketlist, related_name='bucketlistitems')
