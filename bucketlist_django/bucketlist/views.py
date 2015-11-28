@@ -195,10 +195,17 @@ class BucketListItemDetailView(APIView):
 
     def get_item(self, item_id, bucketlist):
         '''returns an instance of a bucketlist item object'''
+        # get the bucketlist item
         try:
-            return BucketlistItem.objects.filter(bucketlist=bucketlist).filter(id=item_id).first()
+            item = BucketlistItem.objects.filter(id=item_id).first()
         except BucketlistItem.DoesNotExist:
             raise Http404
+
+        # check if item belongs to this bucketlist
+        if item.bucketlist != bucketlist:
+            raise PermissionDenied
+        else:
+            return item
 
     def get(self, request, id, item_id, format=None):
         '''returns a bucketlist item of a particular bucketlist'''
@@ -207,17 +214,20 @@ class BucketListItemDetailView(APIView):
         bucketlist = self.get_object(id, request.user)
 
         # get bucketlist items
-        bucketlist_items = self.get_item(item_id, bucketlist)
+        bucketlist_item = self.get_item(item_id, bucketlist)
 
         # create serializer
-        serializer = BucketlistItemSerializer(bucketlist_items)
+        serializer = BucketlistItemSerializer(bucketlist_item)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, id, item_id, format=None):
         '''updates a bucketlist item and returns it'''
 
+        # get the bucketlist object the item belongs to
+        bucketlist = self.get_object(id, request.user)
+
         # get the bucketlist item
-        bucketlist_item = self.get_item(item_id)
+        bucketlist_item = self.get_item(item_id, bucketlist)
 
         # set done
         if 'done' in request.data and request.data['done'].lower() == 'true':
