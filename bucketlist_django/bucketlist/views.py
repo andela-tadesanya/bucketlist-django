@@ -138,6 +138,7 @@ class BucketListItemListView(APIView):
 
     def get(self, request, id, format=None):
         '''returns a list of items in a bucketlist'''
+
         # get the instance of the bucketlist
         bucketlist = self.get_object(id, request.user)
 
@@ -154,11 +155,16 @@ class BucketListItemListView(APIView):
 
     def post(self, request, id, format=None):
         '''creates a bucketlist item'''
+
+        # get the instance of the bucketlist
+        bucketlist = self.get_object(id, request.user)
+
         # create serializer
         serializer = BucketlistItemSerializer(data=request.data)
+
         # create bucketlist if data is valid
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(bucketlist=bucketlist)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

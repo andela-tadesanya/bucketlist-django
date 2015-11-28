@@ -25,6 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class BucketlistItemSerializer(serializers.ModelSerializer):
+    bucketlist = serializers.PrimaryKeyRelatedField(required=False, queryset=Bucketlist.objects.all())
 
     class Meta:
         model = BucketlistItem
