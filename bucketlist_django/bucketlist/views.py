@@ -3,6 +3,7 @@ from bucketlist.models import Bucketlist, BucketlistItem
 from bucketlist.serializers import BucketlistSerializer,\
             BucketlistItemSerializer, UserSerializer
 from django.http import Http404
+from django.core.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -15,11 +16,13 @@ from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 class UserDetail(generics.RetrieveAPIView):
+    '''returns details of a user'''
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
 class UserCreate(generics.CreateAPIView):
+    '''creates a user'''
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -27,9 +30,10 @@ class UserCreate(generics.CreateAPIView):
 class BucketListView(APIView):
     '''manages read and creation of bucketlists'''
 
+    # sets authentication and permissions for this view
     authentication_classes = (SessionAuthentication,
                               BasicAuthentication,
-                              TokenAuthentication)
+                              TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
@@ -51,6 +55,7 @@ class BucketListView(APIView):
 
         # create bucketlist if data is valid
         if serializer.is_valid():
+            # attach the user to the bucketlist before saving
             serializer.save(created_by=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -59,28 +64,37 @@ class BucketListView(APIView):
 class BucketListDetailView(APIView):
     '''manages get, update and delete for individual bucketlists'''
 
-    def get_object(self, id):
+    # sets authentication and permissions for this view
+    authentication_classes = (SessionAuthentication,
+                              BasicAuthentication,
+                              TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, id, user):
         '''returns an instance of a bucketlist object'''
+        # get the bucketlist
         try:
-            return Bucketlist.objects.get(id=id)
+            bucketlist = Bucketlist.objects.get(id=id)
         except Bucketlist.DoesNotExist:
             raise Http404
 
+        # check if bucketlist belongs to this user
+        if bucketlist.created_by != user:
+            raise PermissionDenied
+        else:
+            return bucketlist
+
     def get(self, request, id, format=None):
         '''returns an individual bucketlist'''
-        bucketlist = self.get_object(id)
-
-        # check if the bucketlist exists
-        if bucketlist is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        else:
-            serializer = BucketlistSerializer(bucketlist)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        # get the bucketlist
+        bucketlist = self.get_object(id, request.user)
+        serializer = BucketlistSerializer(bucketlist)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, id, format=None):
         '''updates a bucketlist'''
         # get the bucketlist
-        bucketlist = self.get_object(id)
+        bucketlist = self.get_object(id, request.user)
         serializer = BucketlistSerializer(bucketlist,
                                           data={'name': request.data['name']},
                                           partial=True)
