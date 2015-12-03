@@ -1,0 +1,32 @@
+{% extends "bucketlist/base.html" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col s3 offset-s9">            
+            <!-- User label Dropdown Trigger -->
+            <a class='dropdown-button btn blue' href='#' data-activates='user_dropdown'>Hello, {{ request.user.username }}</a>
+
+            <!-- Dropdown Structure -->
+            <ul id='user_dropdown' class='dropdown-content'>
+                <li><a href="#!">Hello, {{ request.user.username }}</a></li>
+                <li><a href="#!">Create bucketlist</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url 'authentication' %}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- bucketlist display -->
+    <div class="row">
+        <div class="col s12">
+            <h5>Your Bucketlists</h5>
+            <div class="collection">  
+                {% for bucketlist in bucketlists %}
+                    <a href="#!" class="collection-item">{{ bucketlist.name }}</a>
+                {% empty %}
+                    <a href="#!" class="collection-item">You have no bucketlists</a>                   
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock main %}

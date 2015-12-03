@@ -12,17 +12,18 @@
             <!-- login form -->
             <div id="login" class="col s12">
                 <div class="row">
-                    <form class="col s12">
+                    <form action="{% url 'authentication' %}" method="post" class="col s12">
+                    {% csrf_token %}
                       <div class="row">
                         <div class="input-field col s12 m8 l6">
-                            <input id="username" type="text" class="validate">
+                            <input name='username' id="username" type="text" class="validate">
                             <label for="username">Username</label>
                         </div>
                       </div>
                       <div class="row">
                         <div class="input-field col s12 m8 l6">
-                          <input id="password" type="password" class="validate">
-                          <label for="password">Password</label>
+                            <input name='password' id="password" type="password" class="validate">
+                            <label for="password">Password</label>
                         </div>
                       </div>
                       <div class="row">

@@ -335,7 +335,7 @@ class LoginView(View):
                     login(request, user)
 
                     # Redirect to a success page.
-                    return HttpResponseRedirect(reverse(''))
+                    return HttpResponseRedirect(reverse('dashboard'))
                 else:
                     # Return a 'disabled account' error message
                     error = 'This account has been disabled!'
@@ -352,3 +352,15 @@ class LoginView(View):
                 messages.add_message(request, messages.ERROR, form.errors[error])
 
             return HttpResponseRedirect(reverse('homepage') + '#login')
+
+
+class UserDashboardView(View):
+    '''displays the user's dashboard'''
+    template_name = 'bucketlist/dashboard.html'
+
+    def get(self, request):
+        # get all bucketlist that belong to the user
+        bucketlists = Bucketlist.objects.all().filter(created_by=request.user)
+
+        context = {'bucketlists': bucketlists}
+        return render(request, self.template_name, context)
