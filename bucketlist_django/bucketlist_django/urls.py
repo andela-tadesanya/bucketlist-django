@@ -15,14 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from rest_framework.authtoken import views
+from bucketlist.views import HomePageView, RegisterView
 
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', HomePageView.as_view(), name='homepage'),
     url(r'^api/v1.0/', include('bucketlist.urls', namespace='bucketlist')),
 ]
 
+# frontend URLs
 urlpatterns += [
-    url(r'^token/', views.obtain_auth_token, name='token')
+    url(r'^register/$', RegisterView.as_view(), name='register_user'),        
 ]

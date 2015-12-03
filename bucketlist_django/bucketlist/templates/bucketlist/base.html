@@ -1,0 +1,59 @@
+{% load staticfiles %}
+
+<html>
+
+<head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Custom stylesheet -->
+    <link rel="stylesheet" type="text/css" href="{% static 'bucketlist/css/style.css' %}" />
+    
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{% static 'bucketlist/css/materialize.min.css' %}"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+    <div id="gradient">
+        <div class="container">
+            <!-- messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="messages hide">
+                        {{ message }}&nbsp;
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <!-- all contents go in here -->
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    <!-- main div -->
+                    <div class="card-panel hoverable">
+                        <div class="row">
+                            <div class="col s12">
+                                <!-- logo area -->
+                                <img src="{% static 'bucketlist/img/logo.png' %}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            {% block main %}
+
+                            {% endblock main %}
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Import jQuery before materialize.js-->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <!--Import background animation -->
+    <script src="{% static 'bucketlist/js/animatedbg.js' %}"></script>
+    <!--Import materialize.js-->
+    <script type="text/javascript" src="{% static 'bucketlist/js/materialize.min.js' %}"></script>
+    <!--Import toast_messages.js-->
+    <script type="text/javascript" src="{% static 'bucketlist/js/toast_messages.js' %}"></script>
+</body>
+</html>

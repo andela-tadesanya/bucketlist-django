@@ -12,6 +12,13 @@ from rest_framework import generics
 from rest_framework.authentication import SessionAuthentication,\
                     BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.views.generic import View
+from bucketlist.forms import UserRegistrationForm, UserLoginForm
+from rest_framework.test import APIClient
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 
 # Create your views here.
@@ -257,3 +264,91 @@ class BucketListItemDetailView(APIView):
 
         bucketlist_item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class HomePageView(View):
+    '''handles homepage requests'''
+    template_name = 'bucketlist/index.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+class RegisterView(View):
+    '''handles user registration'''
+
+    def post(self, request):
+        '''creates a new user'''
+
+        # create an instance of user registration form
+        form = UserRegistrationForm(request.POST)
+
+        # validate form
+        if form.is_valid():
+            # create the user
+            user = User.objects.create_user(form.cleaned_data['username'],
+                                            form.cleaned_data['email'],
+                                            form.cleaned_data['password'])
+            user.save()
+            messages.add_message(request, messages.INFO, 'User: %s successfully created.' %(user.username))
+            return HttpResponseRedirect(reverse('homepage'))
+        else:
+            # send back form errors as messages
+            for error in form.errors:
+                messages.add_message(request, messages.ERROR, form.errors[error])
+
+            return HttpResponseRedirect(reverse('homepage') + '#register')
+
+
+class LoginView(View):
+    '''handles user login and logout'''
+
+    def get(self, request):
+        '''logout a user'''
+
+        # logout an authenticated user
+        if request.user.is_authenticated():
+            logout(request)
+
+            # Redirect to home page.
+            info = 'You have been logged out'
+            messages.add_message(request, messages.INFO, info)
+            return HttpResponseRedirect(reverse('homepage'))
+        else:
+            return HttpResponseRedirect(reverse('homepage'))
+
+    def post(self, request):
+        ''' authenticate and login a user '''
+
+        form = UserLoginForm(request.POST)
+
+        # validate form
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            # authenticate user
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                # the password verified for the user
+                if user.is_active:
+                    login(request, user)
+
+                    # Redirect to a success page.
+                    return HttpResponseRedirect(reverse(''))
+                else:
+                    # Return a 'disabled account' error message
+                    error = 'This account has been disabled!'
+                    messages.add_message(request, messages.ERROR, error)
+                    return HttpResponseRedirect(reverse('homepage') + '#login')
+            else:
+                # Return an 'invalid login' error message.
+                error = 'Invalid login credentials'
+                messages.add_message(request, messages.ERROR, error)
+                return HttpResponseRedirect(reverse('homepage') + '#login')
+        else:
+            # send back form errors as messages
+            for error in form.errors:
+                messages.add_message(request, messages.ERROR, form.errors[error])
+
+            return HttpResponseRedirect(reverse('homepage') + '#login')
