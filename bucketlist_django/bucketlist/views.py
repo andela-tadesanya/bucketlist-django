@@ -19,6 +19,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # Create your views here.
@@ -360,7 +361,21 @@ class UserDashboardView(View):
 
     def get(self, request):
         # get all bucketlist that belong to the user
-        bucketlists = Bucketlist.objects.all().filter(created_by=request.user)
+        bucketlist_objects = Bucketlist.objects.all().filter(created_by=request.user)
 
-        context = {'bucketlists': bucketlists}
+        # setup paginator
+        paginator = Paginator(bucketlist_objects, 10)
+
+        # get page being requested
+        page = request.GET.get('page')
+        try:
+            bucketlists = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            bucketlists = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range deliver last page
+            bucketlists = paginator.page(paginator.num_pages)
+
+        context = {'bucketlists': bucketlists, 'page_range': paginator.page_range}
         return render(request, self.template_name, context)

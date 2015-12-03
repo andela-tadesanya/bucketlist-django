@@ -1,32 +1,45 @@
 {% extends "bucketlist/base.html" %}
 
 {% block main %}
-    <div class="row">
-        <div class="col s3 offset-s9">            
-            <!-- User label Dropdown Trigger -->
-            <a class='dropdown-button btn blue' href='#' data-activates='user_dropdown'>Hello, {{ request.user.username }}</a>
-
-            <!-- Dropdown Structure -->
-            <ul id='user_dropdown' class='dropdown-content'>
-                <li><a href="#!">Hello, {{ request.user.username }}</a></li>
-                <li><a href="#!">Create bucketlist</a></li>
-                <li class="divider"></li>
-                <li><a href="{% url 'authentication' %}">Logout</a></li>
-            </ul>
-        </div>
-    </div>
-
     <!-- bucketlist display -->
     <div class="row">
+        <div class="col s6 valign-wrapper">
+            <h5 class="valign">Your Bucketlists</h5>
+        </div>
+        <div class="col s6 right-align">
+            <a class="btn-floating btn-large waves-effect waves-light red"><i data-tooltip="Create Bucketlist" class="material-icons tooltipped" data-position="bottom" data-delay="20">add</i></a>
+        </div>
+    </div>
+    <div class="row">
         <div class="col s12">
-            <h5>Your Bucketlists</h5>
             <div class="collection">  
-                {% for bucketlist in bucketlists %}
-                    <a href="#!" class="collection-item">{{ bucketlist.name }}</a>
+                {% for bucketlist in bucketlists.object_list %}
+                    <a href="#!" class="collection-item">{{ bucketlist.name }}<span class="secondary-content"><i data-tooltip="Edit" class="material-icons tooltipped" data-position="bottom" data-delay="20">mode_edit</i>&nbsp;&nbsp;&nbsp;&nbsp;<i data-tooltip="Delete" class="material-icons tooltipped" data-position="bottom" data-delay="20">delete</i></span></a>
                 {% empty %}
                     <a href="#!" class="collection-item">You have no bucketlists</a>                   
                 {% endfor %}
             </div>
+            <!-- pagination -->
+            <ul class="pagination">
+                <!-- previous -->
+                {% if bucketlists.has_previous %}
+                    <li class="waves-effect"><a href="?page={{ bucketlists.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+                {% else %}
+                    <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
+                {% endif %}
+
+                <!-- page numbers -->
+                {% for page in bucketlists.paginator.page_range %}
+                    <li class="{% if bucketlists.number == page %}active{% else %}waves-effect{% endif %}"><a href="?page={{page}}">{{ page }}</a></li>    
+                {% endfor %}
+                
+                <!-- next -->
+                {% if bucketlists.has_next %}
+                    <li class="waves-effect"><a href="?page={{ bucketlists.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+                {% else %}
+                    <li class="disabled"><a href="#"><i class="material-icons">chevron_right</i></a></li>
+                {% endif %}
+            </ul>
         </div>
     </div>
 {% endblock main %}

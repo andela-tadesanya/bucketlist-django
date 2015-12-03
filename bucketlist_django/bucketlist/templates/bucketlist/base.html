@@ -33,9 +33,23 @@
                     <!-- main div -->
                     <div class="card-panel hoverable">
                         <div class="row">
-                            <div class="col s12">
+                            <div class="col s8 left-align">
                                 <!-- logo area -->
                                 <img src="{% static 'bucketlist/img/logo.png' %}"/>
+                            </div>
+                            <div class="col s4 right-align">
+                                <!-- user area -->
+                                {% if request.user.is_authenticated %}
+                                    <!-- User label Dropdown Trigger -->
+                                    <a class='dropdown-button btn blue user-button' href='#' data-activates='user_dropdown'>Hello, {{ request.user.username }}</a>
+
+                                    <!-- Dropdown Structure -->
+                                    <ul id='user_dropdown' class='dropdown-content user-button'>
+                                        <li><a href="#!">Hello, {{ request.user.username }}</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="{% url 'authentication' %}">Logout</a></li>
+                                    </ul>                                    
+                                {% endif %}
                             </div>
                         </div>
                         <div class="row">
