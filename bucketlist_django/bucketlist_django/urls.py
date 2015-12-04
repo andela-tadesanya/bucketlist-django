@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from bucketlist.views import HomePageView, RegisterView, UserDashboardView,\
-                             LoginView
+                             LoginView, UpdateBucketlist, DeleteBucketlist
 from django.contrib.auth.decorators import login_required
 
 
@@ -31,4 +31,6 @@ urlpatterns += [
     url(r'^register/$', RegisterView.as_view(), name='register_user'),
     url(r'^authentication/$', LoginView.as_view(), name='authentication'),
     url(r'^user/$', login_required(UserDashboardView.as_view()), name='dashboard'),
+    url(r'^bucketlist/update/$', login_required(UpdateBucketlist.as_view()), name='update_bucketlist'),
+    url(r'^bucketlist/delete/$', login_required(DeleteBucketlist.as_view()), name='delete_bucketlist'),
 ]

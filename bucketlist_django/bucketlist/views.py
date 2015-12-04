@@ -14,7 +14,8 @@ from rest_framework.authentication import SessionAuthentication,\
 from rest_framework.permissions import IsAuthenticated
 from django.views.generic import View
 from bucketlist.forms import UserRegistrationForm, UserLoginForm,\
-                             CreateBucketlistForm
+                             CreateBucketlistForm, UpdateBucketlistForm,\
+                             DeleteBucketlistForm
 from rest_framework.test import APIClient
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -355,7 +356,10 @@ class LoginView(View):
 
 
 class UserDashboardView(View):
-    '''displays the user's dashboard'''
+    '''
+    displays the user's dashboard, handles bucketlist display,
+    creation, update and deletion
+    '''
     template_name = 'bucketlist/dashboard.html'
     client = APIClient()
 
@@ -378,7 +382,8 @@ class UserDashboardView(View):
             # If page is out of range deliver last page
             bucketlists = paginator.page(paginator.num_pages)
 
-        context = {'bucketlists': bucketlists, 'page_range': paginator.page_range}
+        context = {'bucketlists': bucketlists,
+                   'page_range': paginator.page_range}
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -391,13 +396,78 @@ class UserDashboardView(View):
             bucketlist_name = form.cleaned_data['name']
 
             # create a new bucketlist
-            new_bucketlist = Bucketlist(name=bucketlist_name, created_by=request.user)
+            new_bucketlist = Bucketlist(name=bucketlist_name,
+                                        created_by=request.user)
             new_bucketlist.save()
 
-            messages.add_message(request, messages.INFO, 'Bucketlist successfully created.')
+            messages.add_message(request,
+                                 messages.INFO,
+                                 'Bucketlist successfully created.')
         else:
             # send back form errors as messages
             for error in form.errors:
-                messages.add_message(request, messages.ERROR, form.errors[error])
+                messages.add_message(request,
+                                     messages.ERROR,
+                                     form.errors[error])
+
+        return HttpResponseRedirect(reverse('dashboard'))
+
+
+class UpdateBucketlist(View):
+
+    def post(self, request):
+        '''updates a bucketlist'''
+
+        # validate form
+        form = UpdateBucketlistForm(request.POST)
+
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            id = form.cleaned_data['id']
+
+            # get bucketlist object and update it
+            bucketlist = Bucketlist.objects.get(id=id)
+            bucketlist.name = name
+            bucketlist.save()
+
+            # add success message
+            messages.add_message(request,
+                                 messages.INFO,
+                                 'Bucketlist updated.')
+        else:
+            # send back form errors as messages
+            for error in form.errors:
+                messages.add_message(request,
+                                     messages.ERROR,
+                                     form.errors[error])
+
+        return HttpResponseRedirect(reverse('dashboard'))
+
+
+class DeleteBucketlist(View):
+
+    def post(self, request):
+        '''delete a bucketlist'''
+
+        # validate form
+        form = DeleteBucketlistForm(request.POST)
+
+        if form.is_valid():
+            id = form.cleaned_data['id']
+
+            # get bucketlist object and delete it
+            bucketlist = Bucketlist.objects.get(id=id)
+            bucketlist.delete()
+
+            # add success message
+            messages.add_message(request,
+                                 messages.INFO,
+                                 'Bucketlist deleted.')
+        else:
+            # send back form errors as messages
+            for error in form.errors:
+                messages.add_message(request,
+                                     messages.ERROR,
+                                     form.errors[error])
 
         return HttpResponseRedirect(reverse('dashboard'))

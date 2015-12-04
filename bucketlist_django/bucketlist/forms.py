@@ -14,3 +14,12 @@ class UserLoginForm(forms.Form):
 
 class CreateBucketlistForm(forms.Form):
     name = forms.CharField(max_length=100)
+
+
+class UpdateBucketlistForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    id = forms.CharField(widget=forms.HiddenInput())
+
+
+class DeleteBucketlistForm(forms.Form):
+    id = forms.CharField(widget=forms.HiddenInput())
