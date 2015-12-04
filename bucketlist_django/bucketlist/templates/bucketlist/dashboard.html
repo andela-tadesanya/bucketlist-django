@@ -7,7 +7,7 @@
             <h5 class="valign">Your Bucketlists</h5>
         </div>
         <div class="col s6 right-align">
-            <a class="btn-floating btn-large waves-effect waves-light red"><i data-tooltip="Create Bucketlist" class="material-icons tooltipped" data-position="bottom" data-delay="20">add</i></a>
+            <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#create-bucketlist-modal"><i data-tooltip="Create Bucketlist" class="material-icons tooltipped" data-position="bottom" data-delay="20">add</i></a>
         </div>
     </div>
     <div class="row">
@@ -42,4 +42,23 @@
             </ul>
         </div>
     </div>
+
+    <!-- create bucketlist modal -->
+    <div id="create-bucketlist-modal" class="modal bottom-sheet">
+      <form method="post" action="">
+      {% csrf_token %}
+        <div class="modal-content">
+          <h4>Create a bucketlist</h4>
+            <div class="input-field col s6">
+                <input id="name" name="name" type="text" class="validate">
+                <label for="name">Bucketlist Name</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+      </form>
+    </div>    
 {% endblock main %}

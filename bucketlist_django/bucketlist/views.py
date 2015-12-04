@@ -13,7 +13,8 @@ from rest_framework.authentication import SessionAuthentication,\
                     BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.views.generic import View
-from bucketlist.forms import UserRegistrationForm, UserLoginForm
+from bucketlist.forms import UserRegistrationForm, UserLoginForm,\
+                             CreateBucketlistForm
 from rest_framework.test import APIClient
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -314,9 +315,7 @@ class LoginView(View):
             # Redirect to home page.
             info = 'You have been logged out'
             messages.add_message(request, messages.INFO, info)
-            return HttpResponseRedirect(reverse('homepage'))
-        else:
-            return HttpResponseRedirect(reverse('homepage'))
+        return HttpResponseRedirect(reverse('homepage'))
 
     def post(self, request):
         ''' authenticate and login a user '''
@@ -358,8 +357,10 @@ class LoginView(View):
 class UserDashboardView(View):
     '''displays the user's dashboard'''
     template_name = 'bucketlist/dashboard.html'
+    client = APIClient()
 
     def get(self, request):
+        '''displays a user's dashboard'''
         # get all bucketlist that belong to the user
         bucketlist_objects = Bucketlist.objects.all().filter(created_by=request.user)
 
@@ -379,3 +380,24 @@ class UserDashboardView(View):
 
         context = {'bucketlists': bucketlists, 'page_range': paginator.page_range}
         return render(request, self.template_name, context)
+
+    def post(self, request):
+        '''creates a bucketlist for a user'''
+
+        # validate form
+        form = CreateBucketlistForm(request.POST)
+
+        if form.is_valid():
+            bucketlist_name = form.cleaned_data['name']
+
+            # create a new bucketlist
+            new_bucketlist = Bucketlist(name=bucketlist_name, created_by=request.user)
+            new_bucketlist.save()
+
+            messages.add_message(request, messages.INFO, 'Bucketlist successfully created.')
+        else:
+            # send back form errors as messages
+            for error in form.errors:
+                messages.add_message(request, messages.ERROR, form.errors[error])
+
+        return HttpResponseRedirect(reverse('dashboard'))

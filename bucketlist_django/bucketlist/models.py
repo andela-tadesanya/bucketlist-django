@@ -22,7 +22,7 @@ class Bucketlist(models.Model):
     created_by = models.ForeignKey(User, related_name='bucketlists')
 
     class Meta:
-        ordering = ['date_created']
+        ordering = ['-date_created']
         verbose_name = 'bucketlist'
         verbose_name_plural = 'bucketlists'
 
