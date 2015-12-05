@@ -15,12 +15,12 @@
         <div class="col s12">
             <ul class="collection">  
                 {% for bucketlist in bucketlists.object_list %}
-                    <li href="{% url 'bucketlist_items' bucketlist.id %}" class="collection-item">
-                        {{ bucketlist.name }}
+                    <li class="collection-item">
+                        <a href="{% url 'bucketlist_items' bucketlist.id %}">{{ bucketlist.name }}</a>
                         <span class="secondary-content">
-                            <i data-tooltip="Edit" class="material-icons tooltipped" data-position="bottom" data-delay="20" onclick="$('#edit-bl-modal-{{bucketlist.id}}').openModal();">mode_edit</i>
+                            <i data-tooltip="Edit" class="material-icons tooltipped waves-effect action-icon" data-position="bottom" data-delay="20" onclick="$('#edit-bl-modal-{{bucketlist.id}}').openModal();">mode_edit</i>
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <i data-tooltip="Delete" class="material-icons tooltipped" data-position="bottom" data-delay="20" onclick="$('#delete-bl-modal-{{bucketlist.id}}').openModal();">delete</i>
+                            <i data-tooltip="Delete" class="material-icons tooltipped waves-effect action-icon" data-position="bottom" data-delay="20" onclick="$('#delete-bl-modal-{{bucketlist.id}}').openModal();">delete</i>
                         </span>
                     </li>
 

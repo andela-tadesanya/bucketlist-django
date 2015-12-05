@@ -41,11 +41,15 @@
                                 <!-- user area -->
                                 {% if request.user.is_authenticated %}
                                     <!-- User label Dropdown Trigger -->
-                                    <a class='dropdown-button btn blue user-button' href='#' data-activates='user_dropdown'>Hello, {{ request.user.username }}</a>
+                                    <a class='dropdown-button btn teal user-button' href='#' data-activates='user_dropdown'>
+                                        <i class="material-icons right">arrow_drop_down</i>
+                                        Hello, {{ request.user.username }}
+                                    </a>
 
                                     <!-- Dropdown Structure -->
                                     <ul id='user_dropdown' class='dropdown-content user-button'>
-                                        <li><a href="#!">Hello, {{ request.user.username }}</a></li>
+                                        <li><a href="#">Hello, {{ request.user.username }}</a></li>
+                                        <li><a href="{% url 'dashboard' %}">My Dashboard</a></li>
                                         <li class="divider"></li>
                                         <li><a href="{% url 'authentication' %}">Logout</a></li>
                                     </ul>                                    

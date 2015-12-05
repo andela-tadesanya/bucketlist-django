@@ -24,3 +24,7 @@ body{
 .action-icon:hover{
     cursor: pointer;
 }
+
+.collection-item a{
+    color: teal;
+}
