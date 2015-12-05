@@ -31,7 +31,7 @@
                 </thead>
 
                 <tbody>
-                {% for item in items %}
+                {% for item in items.object_list %}
                     <tr>
                         <td>{{item.name}}</td>
                         <td>{{item.date_created}}</td>
@@ -46,7 +46,28 @@
                     </tr>                    
                 {% endfor %}
                 </tbody>
-            </table>            
+            </table>
+            <!-- pagination -->
+            <ul class="pagination">
+                <!-- previous -->
+                {% if items.has_previous %}
+                    <li class="waves-effect"><a href="?page={{ items.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+                {% else %}
+                    <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
+                {% endif %}
+
+                <!-- page numbers -->
+                {% for page in items.paginator.page_range %}
+                    <li class="{% if items.number == page %}active{% else %}waves-effect{% endif %}"><a href="?page={{page}}">{{ page }}</a></li>    
+                {% endfor %}
+                
+                <!-- next -->
+                {% if items.has_next %}
+                    <li class="waves-effect"><a href="?page={{ items.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+                {% else %}
+                    <li class="disabled"><a href="#"><i class="material-icons">chevron_right</i></a></li>
+                {% endif %}
+            </ul>            
         </div>
     </div>
 

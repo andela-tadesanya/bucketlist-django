@@ -482,7 +482,21 @@ class BucketlistItemView(View):
         bucketlist = get_object_or_404(Bucketlist, pk=id)
 
         # get the list of items for this bucketlist
-        items = bucketlist.bucketlistitems.all()
+        items_object = bucketlist.bucketlistitems.all()
+
+        # setup paginator
+        paginator = Paginator(items_object, 10)
+
+        # get page being requested
+        page = request.GET.get('page')
+        try:
+            items = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            items = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range deliver last page
+            items = paginator.page(paginator.num_pages)
 
         context = {'bucketlist': bucketlist, 'items': items}
 
