@@ -23,3 +23,9 @@ class UpdateBucketlistForm(forms.Form):
 
 class DeleteBucketlistForm(forms.Form):
     id = forms.CharField(widget=forms.HiddenInput())
+
+
+class UpdateBucketlistItemForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    done = forms.BooleanField()
+    id = forms.CharField(widget=forms.HiddenInput())

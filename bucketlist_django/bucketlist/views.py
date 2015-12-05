@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.views.generic import View
 from bucketlist.forms import UserRegistrationForm, UserLoginForm,\
                              CreateBucketlistForm, UpdateBucketlistForm,\
-                             DeleteBucketlistForm
+                             DeleteBucketlistForm, UpdateBucketlistItemForm
 from rest_framework.test import APIClient
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -528,3 +528,46 @@ class BucketlistItemView(View):
                                      messages.ERROR,
                                      form.errors[error])
         return HttpResponseRedirect(reverse('bucketlist_items', kwargs={'id': id}))
+
+
+class UpdateBucketlistItemView(View):
+    ''' updates a bucketlist item'''
+
+    def post(self, request, id):
+        '''update a bucketlist item'''
+
+        # validate submitted form
+        form = UpdateBucketlistItemForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            item_id = form.cleaned_data['id']
+            done = form.cleaned_data['done']
+
+            # get bucketlist item
+            item = BucketlistItem.objects.get(id=item_id)
+
+            # update and save item
+            item.name = name
+            item.done = done
+            item.save()
+
+            # set success message
+            messages.add_message(request,
+                                 messages.INFO,
+                                 'Bucketlist Item updated.')
+        else:
+            # send back form errors as messages
+            for error in form.errors:
+                messages.add_message(request,
+                                     messages.ERROR,
+                                     form.errors[error])
+
+        return HttpResponseRedirect(reverse('bucketlist_items', kwargs={'id': id}))
+
+
+class DeleteBucketlistItemView(View):
+    '''deletes a bucketlist item'''
+
+    def post(self, request, id):
+        '''delete a bucketlist item'''
+        pass

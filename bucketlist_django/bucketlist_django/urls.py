@@ -17,7 +17,8 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from bucketlist.views import HomePageView, RegisterView, UserDashboardView,\
                              LoginView, UpdateBucketlistView,\
-                             DeleteBucketlistView, BucketlistItemView
+                             DeleteBucketlistView, BucketlistItemView,\
+                             UpdateBucketlistItemView, DeleteBucketlistItemView
 from django.contrib.auth.decorators import login_required
 
 
@@ -34,5 +35,7 @@ urlpatterns += [
     url(r'^user/$', login_required(UserDashboardView.as_view()), name='dashboard'),
     url(r'^bucketlist/update/$', login_required(UpdateBucketlistView.as_view()), name='update_bucketlist'),
     url(r'^bucketlist/delete/$', login_required(DeleteBucketlistView.as_view()), name='delete_bucketlist'),
-    url(r'^user/bucketlist/(?P<id>[0-9]+)/items/', login_required(BucketlistItemView.as_view()), name='bucketlist_items'),
+    url(r'^user/bucketlist/(?P<id>[0-9]+)/items/$', login_required(BucketlistItemView.as_view()), name='bucketlist_items'),
+    url(r'^user/bucketlist/(?P<id>[0-9]+)/items/update/$', login_required(UpdateBucketlistItemView.as_view()), name='update_bucketlist_items'),
+    url(r'^user/bucketlist/(?P<id>[0-9]+)/items/delete/$', login_required(DeleteBucketlistItemView.as_view()), name='delete_bucketlist_items'),
 ]

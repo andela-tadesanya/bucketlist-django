@@ -20,3 +20,7 @@ body{
 #user_dropdown{
     margin-top: 50px;
 }
+
+.action-icon:hover{
+    cursor: pointer;
+}
