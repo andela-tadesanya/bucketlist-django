@@ -13,16 +13,16 @@
     <!-- bucketlists -->
     <div class="row">
         <div class="col s12">
-            <div class="collection">  
+            <ul class="collection">  
                 {% for bucketlist in bucketlists.object_list %}
-                    <a href="{% url 'bucketlist_items' bucketlist.id %}" class="collection-item">
+                    <li href="{% url 'bucketlist_items' bucketlist.id %}" class="collection-item">
                         {{ bucketlist.name }}
                         <span class="secondary-content">
                             <i data-tooltip="Edit" class="material-icons tooltipped" data-position="bottom" data-delay="20" onclick="$('#edit-bl-modal-{{bucketlist.id}}').openModal();">mode_edit</i>
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <i data-tooltip="Delete" class="material-icons tooltipped" data-position="bottom" data-delay="20" onclick="$('#delete-bl-modal-{{bucketlist.id}}').openModal();">delete</i>
                         </span>
-                    </a>
+                    </li>
 
                     <!-- modal for editting a bucketlist -->
                     <div id="edit-bl-modal-{{bucketlist.id}}" class="modal">
@@ -60,7 +60,7 @@
                 {% empty %}
                     <a href="#!" class="collection-item">You have no bucketlists</a>                   
                 {% endfor %}
-            </div>
+            </ul>
             <!-- pagination -->
             <ul class="pagination">
                 <!-- previous -->

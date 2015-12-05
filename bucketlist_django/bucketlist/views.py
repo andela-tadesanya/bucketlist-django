@@ -570,4 +570,24 @@ class DeleteBucketlistItemView(View):
 
     def post(self, request, id):
         '''delete a bucketlist item'''
-        pass
+        # validate form
+        form = DeleteBucketlistForm(request.POST)
+
+        if form.is_valid():
+            item_id = form.cleaned_data['id']
+
+            # get bucketlist item and delete
+            item = BucketlistItem.objects.get(id=item_id)
+            item.delete()
+
+            # set success message
+            messages.add_message(request,
+                                 messages.INFO,
+                                 'Bucketlist Item deleted')
+        else:
+            # send back form errors as messages
+            for error in form.errors:
+                messages.add_message(request,
+                                     messages.ERROR,
+                                     form.errors[error])
+        return HttpResponseRedirect(reverse('bucketlist_items', kwargs={'id': id}))
