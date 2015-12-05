@@ -501,3 +501,30 @@ class BucketlistItemView(View):
         context = {'bucketlist': bucketlist, 'items': items}
 
         return render(request, self.template_name, context)
+
+    def post(self, request, id):
+        '''create a bucketlist item'''
+        # get the bucketlist object
+        bucketlist = get_object_or_404(Bucketlist, pk=id)
+
+        # validate form
+        form = CreateBucketlistForm(request.POST)
+
+        if form.is_valid():
+            item_name = form.cleaned_data['name']
+
+            # create and save bucketlist item
+            item = BucketlistItem(name=item_name, bucketlist=bucketlist)
+            item.save()
+
+            # create success message
+            messages.add_message(request,
+                                 messages.INFO,
+                                 'Bucketlist item created')
+        else:
+            # send back form errors as messages
+            for error in form.errors:
+                messages.add_message(request,
+                                     messages.ERROR,
+                                     form.errors[error])
+        return HttpResponseRedirect(reverse('bucketlist_items', kwargs={'id': id}))

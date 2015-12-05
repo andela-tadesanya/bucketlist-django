@@ -20,14 +20,14 @@
         <div class="col s12">
             <table class="highlight">
                 <thead>
-                  <tr>
-                      <th>Name</th>
-                      <th>Date Created</th>
-                      <th>Date Modified</th>
-                      <th>Done</th>
-                      <th></th>
-                      <th></th>
-                  </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date Created</th>
+                        <th>Date Modified</th>
+                        <th>Done</th>
+                        <th></th>
+                        <th><a href="#create-item-modal" class="waves-effect waves-light btn red modal-trigger"><i class="material-icons right">add</i>New Item</a></th>
+                    </tr>
                 </thead>
 
                 <tbody>
@@ -71,5 +71,23 @@
         </div>
     </div>
 
+    <!-- Create bucketlist item modal structure -->
+    <div id="create-item-modal" class="modal">
+    <form class="col s12" method="post" action="">
+    {% csrf_token %}
+        <div class="modal-content">
+          <h4>Create new item:</h4>
+        <div class="input-field col s8">
+          <input id="name" name="name" type="text" class="validate">
+          <label for="name">Item Name</label>
+        </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn waves-effect waves-light" type="submit" name="action">Save
+                <i class="material-icons right">save</i>
+            </button>
+        </div>
+    </form>
+    </div>
 
 {% endblock main %}
