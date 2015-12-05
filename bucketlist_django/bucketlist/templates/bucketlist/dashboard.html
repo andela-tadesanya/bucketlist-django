@@ -1,7 +1,7 @@
 {% extends "bucketlist/base.html" %}
 
 {% block main %}
-    <!-- bucketlist display -->
+    <!-- bucketlist display area -->
     <div class="row">
         <div class="col s6 valign-wrapper">
             <h5 class="valign">Your Bucketlists</h5>
@@ -10,11 +10,12 @@
             <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#create-bucketlist-modal"><i data-tooltip="Create Bucketlist" class="material-icons tooltipped" data-position="bottom" data-delay="20">add</i></a>
         </div>
     </div>
+    <!-- bucketlists -->
     <div class="row">
         <div class="col s12">
             <div class="collection">  
                 {% for bucketlist in bucketlists.object_list %}
-                    <a href="#!" class="collection-item">
+                    <a href="{% url 'bucketlist_items' bucketlist.id %}" class="collection-item">
                         {{ bucketlist.name }}
                         <span class="secondary-content">
                             <i data-tooltip="Edit" class="material-icons tooltipped" data-position="bottom" data-delay="20" onclick="$('#edit-bl-modal-{{bucketlist.id}}').openModal();">mode_edit</i>

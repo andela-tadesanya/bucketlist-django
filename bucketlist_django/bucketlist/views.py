@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from bucketlist.models import Bucketlist, BucketlistItem
 from bucketlist.serializers import BucketlistSerializer,\
             BucketlistItemSerializer, UserSerializer
@@ -413,7 +413,7 @@ class UserDashboardView(View):
         return HttpResponseRedirect(reverse('dashboard'))
 
 
-class UpdateBucketlist(View):
+class UpdateBucketlistView(View):
 
     def post(self, request):
         '''updates a bucketlist'''
@@ -444,7 +444,7 @@ class UpdateBucketlist(View):
         return HttpResponseRedirect(reverse('dashboard'))
 
 
-class DeleteBucketlist(View):
+class DeleteBucketlistView(View):
 
     def post(self, request):
         '''delete a bucketlist'''
@@ -471,3 +471,19 @@ class DeleteBucketlist(View):
                                      form.errors[error])
 
         return HttpResponseRedirect(reverse('dashboard'))
+
+
+class BucketlistItemView(View):
+    template_name = 'bucketlist/items.html'
+
+    def get(self, request, id):
+        '''display the items in a bucketlist'''
+        # get the bucketlist object
+        bucketlist = get_object_or_404(Bucketlist, pk=id)
+
+        # get the list of items for this bucketlist
+        items = bucketlist.bucketlistitems.all()
+
+        context = {'bucketlist': bucketlist, 'items': items}
+
+        return render(request, self.template_name, context)

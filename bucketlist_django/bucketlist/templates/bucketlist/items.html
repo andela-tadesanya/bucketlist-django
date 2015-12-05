@@ -1,0 +1,54 @@
+{% extends "bucketlist/base.html" %}
+
+{% block main %}
+    <!-- bucketlist info -->
+    <div class="row">
+        <div class="col s12">
+            <div class="card-panel teal z-depth-0">
+                <span class="white-text">
+                    <h5>{{bucketlist.name}}</h5>
+                    <small>Date created: {{bucketlist.date_created}}</small>
+                    &nbsp;&nbsp;&nbsp;
+                    <small>Last modified: {{bucketlist.date_modified}}</small>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- bucketlist items -->
+    <div class="row">
+        <div class="col s12">
+            <table class="highlight">
+                <thead>
+                  <tr>
+                      <th>Name</th>
+                      <th>Date Created</th>
+                      <th>Date Modified</th>
+                      <th>Done</th>
+                      <th></th>
+                      <th></th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                {% for item in items %}
+                    <tr>
+                        <td>{{item.name}}</td>
+                        <td>{{item.date_created}}</td>
+                        <td>{{item.date_modified}}</td>
+                        <td>{{item.done}}</td>
+                        <td><i class="material-icons">mode_edit</i></td>
+                        <td><i class="material-icons">delete</i></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6">No items for this bucketlist</td>
+                    </tr>                    
+                {% endfor %}
+                </tbody>
+            </table>            
+        </div>
+    </div>
+
+
+{% endblock main %}
