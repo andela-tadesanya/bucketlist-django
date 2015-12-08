@@ -1,0 +1,30 @@
+body{
+    background-color: #aa00ff;
+    padding: 0px;
+    margin: 0px;
+}
+
+#gradient
+{
+    width: 100%;
+    position: absolute;
+    min-height: 100%;
+    padding: 0px;
+    margin: 0 auto;
+}
+
+.user-button{
+    margin-top: 50px;
+}
+
+#user_dropdown{
+    margin-top: 50px;
+}
+
+.action-icon:hover{
+    cursor: pointer;
+}
+
+.collection-item a{
+    color: teal;
+}
