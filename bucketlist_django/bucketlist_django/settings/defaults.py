@@ -102,8 +102,16 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
+# Static Root
 
 STATIC_URL = '/static/'
+#BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 # Django REST Framework
 REST_FRAMEWORK = {
@@ -115,7 +123,3 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication'
     )
 }
-
-
-# Static Root
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
