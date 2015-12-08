@@ -18,5 +18,10 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 urlpatterns += [
     url(r'^token/', obtain_auth_token, name='token'),
     url(r'^users/$', views.UserCreate.as_view(), name='api_create_user'),
-    url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
+    url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view(), name='api_get_user'),
+]
+
+# django swagger URLs
+urlpatterns += [
+    url(r'^docs/', include('rest_framework_swagger.urls')),
 ]

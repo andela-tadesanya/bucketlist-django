@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    bucketlists = serializers.PrimaryKeyRelatedField(many=True, queryset=Bucketlist.objects.all())
+    bucketlists = serializers.PrimaryKeyRelatedField(required=False, many=True, queryset=Bucketlist.objects.all())
 
     class Meta:
         model = User
