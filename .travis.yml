@@ -1,12 +1,21 @@
 language: python
 python:
-  - "2.7"
-# command to install dependencies
+- '2.7'
 install:
-  - pip install -r requirements.txt
-  - pip install coveralls
-  - python bucketlist_django/manage_testing.py makemigrations
-  - python bucketlist_django/manage_testing.py migrate
-# command to run tests
+- pip install -r requirements.txt
+- pip install coveralls
+- python bucketlist_django/manage_testing.py makemigrations
+- python bucketlist_django/manage_testing.py migrate
 script: coverage run --source='.' bucketlist_django/manage_testing.py test bucketlist
 after_success: coveralls
+deploy:
+  provider: heroku
+  api_key:
+    secure: kXwi1f6Uc5yg4UGlP+AzLJrJzutcKA6eFkGCJGxXE0qNFdN4t0esuvUId8uuTVLGZ4VDFNRaqx/DgHPoWrc/JDW2UBNPYD9JpRyIiCNFmoHQgmzEGjSP1yXRRbvcWxAy1m2K9YBU0AMVUEGVaFu4qjrUPcfOzcbjF4X98+p9lV/iEEww6d0uVIn/bBw1HVBqXhSJ4Fr5xChTlO3ZnT343aeafCDUMeXjt5jJjXDoXyj9W7w0WF6+vMnBSj5PHxANJGaKaTclVQzJa+nkJ6Zw+nmRg1rv2f/2tPFPvXEDFQDpI8nyiGW/ve/O0jWs124/dMTQl66Hn4gzHCNaBTUhub3zi2ux5Ao5QtuafQrwbJuGIX7AjGni38JCSThDkFuOR0CExeqUGcDuIVqx04lRXNOLdo1Hc7y9H1tZYDZb4pmcbc3tbfLZe26CpylS+luj+aYLf44F9qLALKvba/v3xO0V7SdGC4OhYJs4GEfIQTuC2rxSRx2Vm96BV1TXfv1tJrQoinqnPiEL05/riANUQ8MiD3JG73wCSy4TJ+cH0iXRHVqzY3V4VGFTTmtuLjW/VqQ1Q8dl3zY/sb4EkNE0EKscCs301QQC3lNQRZTf0BtbZJRFhWk5JNVWa/Y09uKPE1/m9+iBNVDj5F3gWC/ERmsjLOgQYfC5sZcDRuHkd1Y=
+  app:
+    master: django-bucketlist-application
+  on: master
+  run:
+    - "python bucketlist_django/manage_production.py collectstatic"
+    - "python bucketlist_django/manage_production.py makemigrations"
+    - "python bucketlist_django/manage_production.py migrate"
