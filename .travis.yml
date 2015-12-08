@@ -22,4 +22,4 @@ deploy:
     - "python bucketlist_django/manage_production.py migrate auth --settings=bucketlist_django.settings.production"
     - "python bucketlist_django/manage_production.py migrate --settings=bucketlist_django.settings.production"
   after_deploy:
-    - "heroku ps:scale web=1 --app bucketlist-staging"
+    - "heroku ps:scale web=1 --app django-bucketlist-application"
