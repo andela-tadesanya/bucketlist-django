@@ -58,3 +58,6 @@ target/
 
 # django migrations folder
 bucketlist_django/bucketlist/migrations/
+
+# test database
+*.db
