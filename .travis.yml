@@ -15,3 +15,8 @@ deploy:
   app: django-bucketlist-application
   on:
     repo: andela-tadesanya/django-bucketlist-application
+  run:
+    - "export DJANGO_SETTINGS_MODULE=bucketlist_django.settings.production"
+    - "python bucketlist_django/manage_production.py collectstatic --noinput --settings=bucketlist_django.settings.production"
+    - "python bucketlist_django/manage_production.py makemigrations --settings=bucketlist_django.settings.production"
+    - "python bucketlist_django/manage_production.py migrate --settings=bucketlist_django.settings.production"
