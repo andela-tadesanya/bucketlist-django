@@ -5,6 +5,7 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install coveralls
+  - python bucketlist_django/manage_testing.py syncdb
 # command to run tests
 script: coverage run --source='.' bucketlist_django/manage_testing.py test bucketlist
 after_success: coveralls
