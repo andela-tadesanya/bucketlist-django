@@ -1,0 +1,16 @@
+[run]
+source = bucketlist
+
+[report]
+exclude_lines =
+    def __unicode__(self):
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Bucketlist.DoesNotExist:
+    raise PermissionDenied
+    return Response(status=status.HTTP_204_NO_CONTENT)
+    done = False
+    for error in form.errors:
+    except EmptyPage:
+omit = 
+    */htmlcov/*
+    */bucketlist/migrations/*

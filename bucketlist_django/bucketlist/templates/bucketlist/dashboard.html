@@ -1,0 +1,106 @@
+{% extends "bucketlist/base.html" %}
+
+{% block main %}
+    <!-- bucketlist display area -->
+    <div class="row">
+        <div class="col s6 valign-wrapper">
+            <h5 class="valign">Your Bucketlists</h5>
+        </div>
+        <div class="col s6 right-align">
+            <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#create-bucketlist-modal"><i data-tooltip="Create Bucketlist" class="material-icons tooltipped" data-position="bottom" data-delay="20">add</i></a>
+        </div>
+    </div>
+    <!-- bucketlists -->
+    <div class="row">
+        <div class="col s12">
+            <ul class="collection">  
+                {% for bucketlist in bucketlists.object_list %}
+                    <li class="collection-item">
+                        <a href="{% url 'bucketlist_items' bucketlist.id %}">{{ bucketlist.name }}</a>
+                        <span class="secondary-content">
+                            <i data-tooltip="Edit" class="material-icons tooltipped waves-effect action-icon" data-position="bottom" data-delay="20" onclick="$('#edit-bl-modal-{{bucketlist.id}}').openModal();">mode_edit</i>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <i data-tooltip="Delete" class="material-icons tooltipped waves-effect action-icon" data-position="bottom" data-delay="20" onclick="$('#delete-bl-modal-{{bucketlist.id}}').openModal();">delete</i>
+                        </span>
+                    </li>
+
+                    <!-- modal for editting a bucketlist -->
+                    <div id="edit-bl-modal-{{bucketlist.id}}" class="modal">
+                        <form method="post" action="{% url 'update_bucketlist' %}">
+                        {% csrf_token %}
+                            <div class="modal-content">
+                                <h5>Edit Bucketlist</h5>
+                                <div class="input-field col s6">
+                                    <input id="name" type="text" name="name" class="validate" value="{{bucketlist.name}}">
+                                    <label for="name">Bucketlist Name</label>
+                                </div>
+                                <input id="id" name="id" type="hidden" value="{{bucketlist.id}}">
+                            </div>
+                            <div class="modal-footer left-align">
+                                <button class="btn waves-effect waves-light" type="submit" name="action">Save
+                                    <i class="material-icons right">save</i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- modal for deleting a bucketlist -->
+                    <div id="delete-bl-modal-{{bucketlist.id}}" class="modal bottom-sheet">
+                        <div class="modal-content">
+                            <h5>Are you sure you want to delete this bucketlist?</h5>
+                            <form method="post" action="{% url 'delete_bucketlist' %}">
+                            {% csrf_token %}
+                                <input id="id" name="id" type="hidden" value="{{bucketlist.id}}">
+                                <button class="btn waves-effect waves-light" type="submit" name="action">
+                                    Delete<i class="material-icons right">delete</i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% empty %}
+                    <a href="#!" class="collection-item">You have no bucketlists</a>                   
+                {% endfor %}
+            </ul>
+            <!-- pagination -->
+            <ul class="pagination">
+                <!-- previous -->
+                {% if bucketlists.has_previous %}
+                    <li class="waves-effect"><a href="?page={{ bucketlists.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+                {% else %}
+                    <li class="disabled"><a href="#"><i class="material-icons">chevron_left</i></a></li>
+                {% endif %}
+
+                <!-- page numbers -->
+                {% for page in bucketlists.paginator.page_range %}
+                    <li class="{% if bucketlists.number == page %}active{% else %}waves-effect{% endif %}"><a href="?page={{page}}">{{ page }}</a></li>    
+                {% endfor %}
+                
+                <!-- next -->
+                {% if bucketlists.has_next %}
+                    <li class="waves-effect"><a href="?page={{ bucketlists.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+                {% else %}
+                    <li class="disabled"><a href="#"><i class="material-icons">chevron_right</i></a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- create bucketlist modal -->
+    <div id="create-bucketlist-modal" class="modal bottom-sheet">
+      <form method="post" action="">
+      {% csrf_token %}
+        <div class="modal-content">
+          <h4>Create a bucketlist</h4>
+            <div class="input-field col s6">
+                <input id="name" name="name" type="text" class="validate">
+                <label for="name">Bucketlist Name</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn waves-effect waves-light" type="submit" name="action">Save
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+      </form>
+    </div>    
+{% endblock main %}
