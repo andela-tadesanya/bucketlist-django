@@ -124,3 +124,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication'
     )
 }
+
+
+# Authentication settings
+LOGIN_REDIRECT_URL = '/user/'
+LOGIN_URL = '/#login'
+LOGOUT_URL = '/'
