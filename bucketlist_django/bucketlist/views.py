@@ -59,7 +59,12 @@ class BucketListView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
-        '''creates a bucketlist for the current user'''
+        '''
+        creates a bucketlist for the current user
+        ---
+        serializer: bucketlist.serializers.BucketlistSerializer
+        omit_serializer: false
+        '''
 
         serializer = BucketlistSerializer(data=request.data)
 
@@ -72,7 +77,9 @@ class BucketListView(APIView):
 
 
 class BucketListDetailView(APIView):
-    '''manages get, update and delete for individual bucketlists'''
+    '''
+    manages get, update and delete for individual bucketlists
+    '''
 
     # sets authentication and permissions for this view
     authentication_classes = (SessionAuthentication,
@@ -95,14 +102,24 @@ class BucketListDetailView(APIView):
             return bucketlist
 
     def get(self, request, id, format=None):
-        '''returns an individual bucketlist'''
+        '''
+        returns an individual bucketlist
+        ---
+        serializer: bucketlist.serializers.BucketlistSerializer
+        omit_serializer: false
+        '''
         # get the bucketlist
         bucketlist = self.get_object(id, request.user)
         serializer = BucketlistSerializer(bucketlist)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, id, format=None):
-        '''updates a bucketlist'''
+        '''
+        updates a bucketlist
+        ---
+        serializer: bucketlist.serializers.BucketlistSerializer
+        omit_serializer: false
+        '''
         # get the bucketlist
         bucketlist = self.get_object(id, request.user)
         serializer = BucketlistSerializer(bucketlist,
@@ -116,6 +133,12 @@ class BucketListDetailView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id, format=None):
+        '''
+        deletes a bucketlist
+        ---
+        serializer: bucketlist.serializers.BucketlistSerializer
+        omit_serializer: false
+        '''
         # get the bucketlist
         bucketlist = self.get_object(id, request.user)
 
@@ -124,7 +147,9 @@ class BucketListDetailView(APIView):
 
 
 class BucketListItemListView(APIView):
-    '''displays and creates items of a bucketlist'''
+    '''
+    displays and creates items of a bucketlist
+    '''
 
     # set authentication and permissions for this view
     authentication_classes = (SessionAuthentication,
@@ -148,7 +173,12 @@ class BucketListItemListView(APIView):
             return bucketlist
 
     def get(self, request, id, format=None):
-        '''returns a list of items in a bucketlist'''
+        '''
+        returns a list of items in a bucketlist
+        ---
+        serializer: bucketlist.serializers.BucketlistItemSerializer
+        omit_serializer: false
+        '''
 
         # get the instance of the bucketlist
         bucketlist = self.get_object(id, request.user)
@@ -165,7 +195,12 @@ class BucketListItemListView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, id, format=None):
-        '''creates a bucketlist item'''
+        '''
+        creates a bucketlist item
+        ---
+        serializer: bucketlist.serializers.BucketlistItemSerializer
+        omit_serializer: false
+        '''
 
         # get the instance of the bucketlist
         bucketlist = self.get_object(id, request.user)
@@ -205,7 +240,9 @@ class BucketListItemDetailView(APIView):
             return bucketlist
 
     def get_item(self, item_id, bucketlist):
-        '''returns an instance of a bucketlist item object'''
+        '''
+        returns an instance of a bucketlist item object
+        '''
         # get the bucketlist item
         try:
             item = BucketlistItem.objects.filter(id=item_id).first()
@@ -219,7 +256,12 @@ class BucketListItemDetailView(APIView):
             return item
 
     def get(self, request, id, item_id, format=None):
-        '''returns a bucketlist item of a particular bucketlist'''
+        '''
+        returns a bucketlist item of a particular bucketlist
+        ---
+        serializer: bucketlist.serializers.BucketlistItemSerializer
+        omit_serializer: false
+        '''
 
         # get the bucketlist object the item belongs to
         bucketlist = self.get_object(id, request.user)
@@ -232,7 +274,12 @@ class BucketListItemDetailView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, id, item_id, format=None):
-        '''updates a bucketlist item and returns it'''
+        '''
+        updates a bucketlist item and returns it
+        ---
+        serializer: bucketlist.serializers.BucketlistItemSerializer
+        omit_serializer: false
+        '''
 
         # get the bucketlist object the item belongs to
         bucketlist = self.get_object(id, request.user)
@@ -257,7 +304,12 @@ class BucketListItemDetailView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id, item_id, format=None):
-        '''deletes a bucketlist item'''
+        '''
+        deletes a bucketlist item
+        ---
+        serializer: bucketlist.serializers.BucketlistItemSerializer
+        omit_serializer: false
+        '''
 
         # get the bucketlist object the item belongs to
         bucketlist = self.get_object(id, request.user)

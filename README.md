@@ -29,6 +29,7 @@ version: 1.0.0
 
 # API Documentation
 Uses Django REST Swagger to document the API. Run the server and go to the URL 'api/v1.0/docs/'
+*You need to be logged in to get full access to the swagger documentation*
 
 # User Interface
 There is also a user interface you can access to use the app from the root URL
