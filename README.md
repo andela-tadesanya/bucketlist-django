@@ -35,7 +35,7 @@ Uses Django REST Swagger to document the API. Run the server and go to the URL '
 There is also a user interface you can access to use the app from the root URL
 
 # Demo
-![https://django-bucketlist-application.herokuapp.com/](https://django-bucketlist-application.herokuapp.com/)
+[https://django-bucketlist-application.herokuapp.com/](https://django-bucketlist-application.herokuapp.com/)
 
 # Credit
 God, Google and Me
