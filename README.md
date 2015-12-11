@@ -1,4 +1,4 @@
-![bucketlist logo](http://s27.postimg.org/fdhwsdoqr/Bucket_List_logo.png)
+![bucketlist logo](http://s11.postimg.org/5kbbghv2n/bucketlistlogo.jpg)
 
 [![Coverage Status](https://coveralls.io/repos/andela-tadesanya/django-bucketlist-application/badge.svg?branch=master&service=github)](https://coveralls.io/github/andela-tadesanya/django-bucketlist-application?branch=master) [![Build Status](https://travis-ci.org/andela-tadesanya/django-bucketlist-application.svg)](https://travis-ci.org/andela-tadesanya/django-bucketlist-application)
 
@@ -31,4 +31,4 @@ version: 1.0.0
 Uses Django REST Swagger to document the API. Run the server and go to the URL 'api/v1.0/docs/'
 
 # User Interface
-There is also a user interface you can access to use the app
+There is also a user interface you can access to use the app from the root URL
