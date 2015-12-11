@@ -5,14 +5,14 @@
 # Introduction
 A Django based application for creating and managing a bucketlist.
 
-# FEATURES
+# Features
 - Supports multiple users
 - Built with a postgres database
 - Token, Session and Basic authentication supported
 - Users can create multiple bucket lists and bucketlist items
 - Users can edit/delete bucket lists and items in them
 
-# INSTALLATION
+# Installation
 - Download the repo
 - cd into the project root in your favorite commandline tool
 - Run `pip install -r requirements.txt` to install all dependencies
@@ -24,7 +24,7 @@ A Django based application for creating and managing a bucketlist.
 
 *Note: Postgres User must be a superuser that can create a database or else test suites wont run*
 
-# VERSION
+# Version
 version: 1.0.0
 
 # API Documentation
@@ -33,3 +33,9 @@ Uses Django REST Swagger to document the API. Run the server and go to the URL '
 
 # User Interface
 There is also a user interface you can access to use the app from the root URL
+
+# Demo
+![https://django-bucketlist-application.herokuapp.com/](https://django-bucketlist-application.herokuapp.com/)
+
+# Credit
+God, Google and Me
