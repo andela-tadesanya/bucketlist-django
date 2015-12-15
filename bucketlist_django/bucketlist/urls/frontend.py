@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from bucketlist.views import HomePageView, RegisterView, UserDashboardView,\
+from bucketlist.views.frontend import HomePageView, RegisterView, UserDashboardView,\
                              LoginView, UpdateBucketlistView,\
                              DeleteBucketlistView, BucketlistItemView,\
                              UpdateBucketlistItemView, DeleteBucketlistItemView
