@@ -4,9 +4,9 @@ python:
 install:
 - pip install -r requirements.txt
 - pip install coveralls
-- python bucketlist_django/manage_testing.py makemigrations
-- python bucketlist_django/manage_testing.py migrate
-script: coverage run --source='.' bucketlist_django/manage_testing.py test bucketlist
+- python bucketlist_django/manage.py makemigrations
+- python bucketlist_django/manage.py migrate
+script: coverage run --source='.' bucketlist_django/manage.py test bucketlist
 after_success: coveralls
 deploy:
   provider: heroku
