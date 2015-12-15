@@ -12,7 +12,7 @@
             <!-- login form -->
             <div id="login" class="col s12">
                 <div class="row">
-                    <form action="{% url 'authentication' %}" method="post" class="col s12">
+                    <form action="{% url 'frontend:authentication' %}" method="post" class="col s12">
                     {% csrf_token %}
                       <div class="row">
                         <div class="input-field col s12 m8 l6">
@@ -39,7 +39,7 @@
             <!-- register form -->
             <div id="register" class="col s12">
                 <div class="row">
-                    <form action="{% url 'register_user' %}" method="post" class="col s12">
+                    <form action="{% url 'frontend:register_user' %}" method="post" class="col s12">
                     {% csrf_token %}
                       <div class="row">
                         <div class="input-field col s6 offset-s6">

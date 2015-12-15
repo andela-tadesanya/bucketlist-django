@@ -346,13 +346,13 @@ class RegisterView(View):
                                             form.cleaned_data['password'])
             user.save()
             messages.add_message(request, messages.INFO, 'User: %s successfully created.' %(user.username))
-            return HttpResponseRedirect(reverse('homepage'))
+            return HttpResponseRedirect(reverse('frontend:homepage'))
         else:
             # send back form errors as messages
             for error in form.errors:
                 messages.add_message(request, messages.ERROR, form.errors[error])
 
-            return HttpResponseRedirect(reverse('homepage') + '#register')
+            return HttpResponseRedirect(reverse('frontend:homepage') + '#register')
 
 
 class LoginView(View):
@@ -368,7 +368,7 @@ class LoginView(View):
             # Redirect to home page.
             info = 'You have been logged out'
             messages.add_message(request, messages.INFO, info)
-        return HttpResponseRedirect(reverse('homepage'))
+        return HttpResponseRedirect(reverse('frontend:homepage'))
 
     def post(self, request):
         ''' authenticate and login a user '''
@@ -388,23 +388,23 @@ class LoginView(View):
                     login(request, user)
 
                     # Redirect to a success page.
-                    return HttpResponseRedirect(reverse('dashboard'))
+                    return HttpResponseRedirect(reverse('frontend:dashboard'))
                 else:
                     # Return a 'disabled account' error message
                     error = 'This account has been disabled!'
                     messages.add_message(request, messages.ERROR, error)
-                    return HttpResponseRedirect(reverse('homepage') + '#login')
+                    return HttpResponseRedirect(reverse('frontend:homepage') + '#login')
             else:
                 # Return an 'invalid login' error message.
                 error = 'Invalid login credentials'
                 messages.add_message(request, messages.ERROR, error)
-                return HttpResponseRedirect(reverse('homepage') + '#login')
+                return HttpResponseRedirect(reverse('frontend:homepage') + '#login')
         else:
             # send back form errors as messages
             for error in form.errors:
                 messages.add_message(request, messages.ERROR, form.errors[error])
 
-            return HttpResponseRedirect(reverse('homepage') + '#login')
+            return HttpResponseRedirect(reverse('frontend:homepage') + '#login')
 
 
 class UserDashboardView(View):
@@ -462,7 +462,7 @@ class UserDashboardView(View):
                                      messages.ERROR,
                                      form.errors[error])
 
-        return HttpResponseRedirect(reverse('dashboard'))
+        return HttpResponseRedirect(reverse('frontend:dashboard'))
 
 
 class UpdateBucketlistView(View):
@@ -493,7 +493,7 @@ class UpdateBucketlistView(View):
                                      messages.ERROR,
                                      form.errors[error])
 
-        return HttpResponseRedirect(reverse('dashboard'))
+        return HttpResponseRedirect(reverse('frontend:dashboard'))
 
 
 class DeleteBucketlistView(View):
@@ -522,7 +522,7 @@ class DeleteBucketlistView(View):
                                      messages.ERROR,
                                      form.errors[error])
 
-        return HttpResponseRedirect(reverse('dashboard'))
+        return HttpResponseRedirect(reverse('frontend:dashboard'))
 
 
 class BucketlistItemView(View):
@@ -579,7 +579,7 @@ class BucketlistItemView(View):
                 messages.add_message(request,
                                      messages.ERROR,
                                      form.errors[error])
-        return HttpResponseRedirect(reverse('bucketlist_items', kwargs={'id': id}))
+        return HttpResponseRedirect(reverse('frontend:bucketlist_items', kwargs={'id': id}))
 
 
 class UpdateBucketlistItemView(View):
@@ -614,7 +614,7 @@ class UpdateBucketlistItemView(View):
                                      messages.ERROR,
                                      form.errors[error])
 
-        return HttpResponseRedirect(reverse('bucketlist_items', kwargs={'id': id}))
+        return HttpResponseRedirect(reverse('frontend:bucketlist_items', kwargs={'id': id}))
 
 
 class DeleteBucketlistItemView(View):
@@ -642,4 +642,4 @@ class DeleteBucketlistItemView(View):
                 messages.add_message(request,
                                      messages.ERROR,
                                      form.errors[error])
-        return HttpResponseRedirect(reverse('bucketlist_items', kwargs={'id': id}))
+        return HttpResponseRedirect(reverse('frontend:bucketlist_items', kwargs={'id': id}))
