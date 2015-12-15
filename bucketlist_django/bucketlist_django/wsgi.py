@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.8/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
+from whitenoise.django import DjangoWhiteNoise
 
 # set environment to work in
 environment = {
@@ -23,3 +24,4 @@ settings = environment[os.getenv('DJANGO_ENVIRONMENT', 'production')]
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", settings)
 
 application = get_wsgi_application()
+application = DjangoWhiteNoise(application)
