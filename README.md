@@ -16,11 +16,12 @@ A Django based application for creating and managing a bucketlist.
 - Download the repo
 - cd into the project root in your favorite commandline tool
 - Run `pip install -r requirements.txt` to install all dependencies
-- Run `python bucketlist_django/manage_testing.py test bucketlist` to run tests
-- Run `python bucketlist_django/manage_development makemigrations` and then run `python bucketlist_django/manage_development migrate` to create tables in the database
-- Run `python bucketlist_django/manage_development runserver.py` to start the server
-- On production run `python bucketlist_django/manage_production.py collectstatic` to collect static files
-- On production use `manage_production.py` to run the server. Only use `manage_development.py` on development environment and `manage_testing.py` for testing.
+- Create an environment variable `DJANGO_ENVIRONMENT` with the value 'development', 'production', or 'testing' depending on the environment
+- Run `python bucketlist_django/manage.py test bucketlist` to run tests, with the environment variable DJANGO_ENVIRONMENT set to 'testing'
+- Run `python bucketlist_django/manage.py makemigrations` and then run `python bucketlist_django/manage.py migrate` to create tables in the database
+- Run `python bucketlist_django/manage.py runserver` to start the server
+- On production run `python bucketlist_django/manage.py collectstatic` to collect static files
+- On production set the environment variable DJANGO_ENVIRONMENT to 'production'.
 
 *Note: Postgres User must be a superuser that can create a database or else test suites wont run*
 
@@ -28,8 +29,11 @@ A Django based application for creating and managing a bucketlist.
 version: 1.0.0
 
 # API Documentation
-Uses Django REST Swagger to document the API. Run the server and go to the URL 'api/v1.0/docs/'
+Uses Django REST Swagger to document the API. Run the server and go to the URL `api/v1/docs/`
 *You need to be logged in to get full access to the swagger documentation*
+
+# API Authentication
+The API uses tokens to authenticate, send a post request to the url `/api/v1/token/` with the parameters 'username' and 'password'
 
 # User Interface
 There is also a user interface you can access to use the app from the root URL
