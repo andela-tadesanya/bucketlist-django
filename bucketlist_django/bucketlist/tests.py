@@ -8,6 +8,7 @@ from rest_framework.authtoken.models import Token
 from bucketlist.views import *
 
 
+
 # Create your tests here.
 class BucketlistTestCase(TestCase):
 
@@ -254,7 +255,7 @@ class BucketlistItemEndpointTestCase(APITestCase):
 
         url = reverse('bucketlist:bucketlist_item_detail',
                       kwargs={'id': self.mylist.id,
-                            'item_id': self.listitem.id})
+                              'item_id': self.listitem.id})
         response = client.delete(url)
         self.assertEqual(response.status_code, 204)
 
@@ -266,19 +267,19 @@ class UserFrontendTestCase(TestCase):
 
     def tearDown(self):
         # logout user
-        self.client.get(reverse('authentication'))
+        self.client.get(reverse('frontend:authentication'))
 
     def test_01_user_can_view_homepage(self):
         '''tests user can access homepage'''
         # Issue a GET request.
-        response = self.client.get(reverse('homepage'))
+        response = self.client.get(reverse('frontend:homepage'))
 
         # Check that the response is 200 OK.
         self.assertEqual(response.status_code, 200)
 
     def test_02_user_can_register(self):
         '''tests user can register'''
-        url = reverse('register_user')
+        url = reverse('frontend:register_user')
         data = {'username': 'user6',
                 'password': 'secret',
                 'email': 'user6@yahoo.com'}
@@ -287,7 +288,7 @@ class UserFrontendTestCase(TestCase):
 
     def test_03_user_can_login(self):
         '''tests user can login'''
-        url = reverse('authentication')
+        url = reverse('frontend:authentication')
         data = {'username': 'user6',
                 'password': 'secret'}
         response = self.client.post(url, data,  follow=True)
@@ -296,20 +297,20 @@ class UserFrontendTestCase(TestCase):
     def test_04_user_can_view_dashboard(self):
         '''tests user can access dashboard'''
         # create a user
-        url = reverse('register_user')
+        url = reverse('frontend:register_user')
         data = {'username': 'user7',
                 'password': 'secret',
                 'email': 'user6@yahoo.com'}
         response = self.client.post(url, data,  follow=True)
 
         # login a user
-        url = reverse('authentication')
+        url = reverse('frontend:authentication')
         data = {'username': 'user7',
                 'password': 'secret'}
         response = self.client.post(url, data,  follow=True)
 
         # Issue a GET request to dashboard
-        response = self.client.get(reverse('dashboard'))
+        response = self.client.get(reverse('frontend:dashboard'))
 
         # Check that the response is 200 OK.
         self.assertEqual(response.status_code, 200)
@@ -317,19 +318,19 @@ class UserFrontendTestCase(TestCase):
     def test_05_user_can_create_bucketlist(self):
         '''tests a user can create a bucketlist'''
         # create a user
-        url = reverse('register_user')
+        url = reverse('frontend:register_user')
         data = {'username': 'user7',
                 'password': 'secret',
                 'email': 'user6@yahoo.com'}
         response = self.client.post(url, data,  follow=True)
 
         # login a user
-        url = reverse('authentication')
+        url = reverse('frontend:authentication')
         data = {'username': 'user7',
                 'password': 'secret'}
         response = self.client.post(url, data,  follow=True)
 
-        url = reverse('dashboard')
+        url = reverse('frontend:dashboard')
         data = {'name': 'my bucketlist 1'}
         response = self.client.post(url, data,  follow=True)
 
@@ -339,20 +340,20 @@ class UserFrontendTestCase(TestCase):
     def test_06_user_can_update_bucketlist(self):
         '''tests user can update a bucketlist'''
         # create a user
-        url = reverse('register_user')
+        url = reverse('frontend:register_user')
         data = {'username': 'user7',
                 'password': 'secret',
                 'email': 'user6@yahoo.com'}
         response = self.client.post(url, data,  follow=True)
 
         # login a user
-        url = reverse('authentication')
+        url = reverse('frontend:authentication')
         data = {'username': 'user7',
                 'password': 'secret'}
         response = self.client.post(url, data,  follow=True)
 
         # update a bucketlist
-        url = reverse('update_bucketlist')
+        url = reverse('frontend:update_bucketlist')
         data = {'name': 'my bucketlist 1 updated',
                 'id': 1}
         response = self.client.post(url, data,  follow=True)
@@ -363,14 +364,14 @@ class UserFrontendTestCase(TestCase):
     def test_07_user_can_add_bucketlist_item(self):
         '''tests user can create a bucketlist item'''
         # create a user
-        url = reverse('register_user')
+        url = reverse('frontend:register_user')
         data = {'username': 'user8',
                 'password': 'secret',
                 'email': 'user8@yahoo.com'}
         response = self.client.post(url, data,  follow=True)
 
         # login a user
-        url = reverse('authentication')
+        url = reverse('frontend:authentication')
         data = {'username': 'user8',
                 'password': 'secret'}
         response = self.client.post(url, data,  follow=True)
@@ -381,7 +382,7 @@ class UserFrontendTestCase(TestCase):
                                                created_by=user)
 
         # create bucketlist item
-        url = reverse('bucketlist_items', kwargs={'id': bucketlist.id})
+        url = reverse('frontend:bucketlist_items', kwargs={'id': bucketlist.id})
         data = {'name': 'item 1'}
         response = self.client.post(url, data,  follow=True)
 
@@ -391,14 +392,14 @@ class UserFrontendTestCase(TestCase):
     def test_08_user_can_view_bucketlist_item(self):
         ''' tests user can view his bucketlist items'''
         # create a user
-        url = reverse('register_user')
+        url = reverse('frontend:register_user')
         data = {'username': 'user9',
                 'password': 'secret',
                 'email': 'user9@yahoo.com'}
         response = self.client.post(url, data,  follow=True)
 
         # login a user
-        url = reverse('authentication')
+        url = reverse('frontend:authentication')
         data = {'username': 'user9',
                 'password': 'secret'}
         response = self.client.post(url, data,  follow=True)
@@ -409,7 +410,7 @@ class UserFrontendTestCase(TestCase):
                                   created_by=user)
 
         # display bucketlist items
-        url = reverse('bucketlist_items', kwargs={'id': 1})
+        url = reverse('frontend:bucketlist_items', kwargs={'id': 1})
         response = self.client.get(url)
 
         # Check that the response is 200 OK.
@@ -418,14 +419,14 @@ class UserFrontendTestCase(TestCase):
     def test_09_user_can_update_bucketlist_item(self):
         '''tests user can update a bucketlist item'''
         # create a user
-        url = reverse('register_user')
+        url = reverse('frontend:register_user')
         data = {'username': 'user10',
                 'password': 'secret',
                 'email': 'user10@yahoo.com'}
         response = self.client.post(url, data,  follow=True)
 
         # login a user
-        url = reverse('authentication')
+        url = reverse('frontend:authentication')
         data = {'username': 'user10',
                 'password': 'secret'}
         response = self.client.post(url, data,  follow=True)
@@ -436,12 +437,12 @@ class UserFrontendTestCase(TestCase):
                                                created_by=user)
 
         # create bucketlist item
-        url = reverse('bucketlist_items', kwargs={'id': bucketlist.id})
+        url = reverse('frontend:bucketlist_items', kwargs={'id': bucketlist.id})
         data = {'name': 'item 1'}
         response = self.client.post(url, data,  follow=True)
 
         # update bucketlist item
-        url = reverse('update_bucketlist_items', kwargs={'id': bucketlist.id})
+        url = reverse('frontend:update_bucketlist_items', kwargs={'id': bucketlist.id})
         data = {'name': 'updated name',
                 'id': 1,
                 'done': 'true'}
@@ -454,14 +455,14 @@ class UserFrontendTestCase(TestCase):
         '''tests if user can delete a bucketlist item'''
 
         # create a user
-        url = reverse('register_user')
+        url = reverse('frontend:register_user')
         data = {'username': 'user11',
                 'password': 'secret',
                 'email': 'user11@yahoo.com'}
         response = self.client.post(url, data,  follow=True)
 
         # login a user
-        url = reverse('authentication')
+        url = reverse('frontend:authentication')
         data = {'username': 'user11',
                 'password': 'secret'}
         response = self.client.post(url, data,  follow=True)
@@ -472,12 +473,12 @@ class UserFrontendTestCase(TestCase):
                                                created_by=user)
 
         # create bucketlist item
-        url = reverse('bucketlist_items', kwargs={'id': bucketlist.id})
+        url = reverse('frontend:bucketlist_items', kwargs={'id': bucketlist.id})
         data = {'name': 'item 1'}
         response = self.client.post(url, data,  follow=True)
 
         # delete bucketlist item
-        url = reverse('delete_bucketlist_items',
+        url = reverse('frontend:delete_bucketlist_items',
                       kwargs={'id': bucketlist.id})
         data = {'id': 1}
         response = self.client.post(url, data,  follow=True)
@@ -488,20 +489,20 @@ class UserFrontendTestCase(TestCase):
     def test_11_user_can_delete_bucketlist(self):
         '''tests user can delete a bucketlist'''
         # create a user
-        url = reverse('register_user')
+        url = reverse('frontend:register_user')
         data = {'username': 'user7',
                 'password': 'secret',
                 'email': 'user6@yahoo.com'}
         response = self.client.post(url, data,  follow=True)
 
         # login a user
-        url = reverse('authentication')
+        url = reverse('frontend:authentication')
         data = {'username': 'user7',
                 'password': 'secret'}
         response = self.client.post(url, data,  follow=True)
 
         # delete a bucketlist
-        url = reverse('delete_bucketlist')
+        url = reverse('frontend:delete_bucketlist')
         data = {'id': 1}
         response = self.client.post(url, data,  follow=True)
 
