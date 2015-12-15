@@ -24,7 +24,7 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api/v1.0/', include('bucketlist.urls', namespace='bucketlist')),
+    url(r'^api/v1/', include('bucketlist.urls', namespace='bucketlist')),
 ]
 
 # frontend URLs

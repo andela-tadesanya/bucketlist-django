@@ -3,7 +3,7 @@ from defaults import *
 
 DEBUG = True
 
-WSGI_APPLICATION = 'bucketlist_django.wsgi_testing.application'
+WSGI_APPLICATION = 'bucketlist_django.wsgi.application'
 
 DATABASES = {
     'default': {

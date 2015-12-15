@@ -1,9 +1,9 @@
 # load defaults and override with devlopment settings
 from defaults import *
 
-DEBUG = True
+DEBUG = False
 
-WSGI_APPLICATION = 'bucketlist_django.wsgi_production.application'
+WSGI_APPLICATION = 'bucketlist_django.wsgi.application'
 
 # Parse database configuration from $DATABASE_URL
 import dj_database_url

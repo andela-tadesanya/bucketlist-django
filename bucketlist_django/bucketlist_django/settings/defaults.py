@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'bucketlist_django.wsgi.application'
+WSGI_APPLICATION = 'bucketlist_django.wsgi'
 
 
 # Database
